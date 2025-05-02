@@ -115,7 +115,7 @@ const PokemonDetailsPage = () => {
 
 
   if (loading) {
-    return <SectionLoader/>;
+    return <SectionLoader minHeight="min-h-screen" message="Loading Pokémon Details..."/>;
   }
 
   if (error) {
