@@ -173,7 +173,7 @@ const ComparePokemons = () => {
       <>
         {stats.map((stat) => (
           <div key={stat.name} className="grid grid-cols-11 gap-1 mb-2 items-center">
-            <div className="col-span-5  max-md:col-span-4 flex items-center justify-end">
+            <div className="col-span-5  max-md:col-span-3 flex items-center justify-end">
               <span className="text-xs sm:text-sm font-bold text-white mr-2">{stat.left}</span>
               <StatBar 
                 value={stat.left} 
@@ -181,8 +181,8 @@ const ComparePokemons = () => {
                 color={getStatColor(stat.left, stat.right)} 
               />
             </div>
-            <div className="col-span-1 max-md:col-span-3 text-center text-xs font-bold text-white">{stat.name}</div>
-            <div className="col-span-5 max-md:col-span-4 flex items-center justify-end">
+            <div className="col-span-1 max-md:col-span-5 text-center text-xs font-bold text-white">{stat.name}</div>
+            <div className="col-span-5 max-md:col-span-3 flex items-center justify-end">
               <StatBar 
                 value={stat.right} 
                 maxValue={255} 
@@ -198,7 +198,7 @@ const ComparePokemons = () => {
         {/* Total stats */}
         <div className="mt-3 pt-3 border-t border-gray-700">
           <div className="grid grid-cols-11 gap-1 items-center">
-            <div className="col-span-5 max-md:col-span-4 flex items-center justify-end">
+            <div className="col-span-5 max-md:col-span-3 flex items-center justify-end">
               <span className="text-xs sm:text-sm font-bold text-white mr-2">{leftTotal}</span>
               <StatBar 
                 value={leftTotal} 
@@ -206,8 +206,8 @@ const ComparePokemons = () => {
                 color={getStatColor(leftTotal, rightTotal)} 
               />
             </div>
-            <div className="col-span-1 max-md:col-span-3 text-center text-xs font-bold text-white">TOTAL</div>
-            <div className="col-span-5 max-md:col-span-4 flex items-center justify-end">
+            <div className="col-span-1 max-md:col-span-5 text-center text-xs font-bold text-white">TOTAL</div>
+            <div className="col-span-5 max-md:col-span-3 flex items-center justify-end">
               <StatBar 
                 value={rightTotal} 
                 maxValue={720} 
