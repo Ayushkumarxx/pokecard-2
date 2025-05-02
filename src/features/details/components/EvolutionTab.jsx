@@ -3,11 +3,10 @@ import { FaExclamationTriangle, FaArrowRight } from "react-icons/fa";
 
 const EvolutionTab = ({ evolutionChain, evolutionLoading, pokemon }) => {
   return (
-    <div className="py-8">
-      <h2 className="text-2xl font-bold mb-10 text-center">
-        Evolution Chain
-      </h2>
+    <div className="py-8 px-4 sm:px-6">
+      <h2 className="text-2xl font-bold mb-10 text-center text-white">Evolution Chain</h2>
 
+      {/* Loading state */}
       {evolutionLoading ? (
         <div className="flex justify-center items-center h-64">
           <div className="w-14 h-14 border-t-4 border-r-4 border-indigo-400 rounded-full animate-spin"></div>
@@ -60,7 +59,7 @@ const EvolutionTab = ({ evolutionChain, evolutionLoading, pokemon }) => {
 
                       {index > 0 && (
                         <div className="mt-2 py-2 px-4 bg-gray-900 rounded-lg text-center transition-all duration-300 group-hover:bg-gray-800">
-                          <p className="text-sm text-indigo-300 font-medium">
+                          <p className="text-sm text-indigo-300 font-bold">
                             {evo.min_level
                               ? `Level ${evo.min_level}`
                               : evo.trigger === "use-item" && evo.item
@@ -78,9 +77,9 @@ const EvolutionTab = ({ evolutionChain, evolutionLoading, pokemon }) => {
                 </Link>
 
                 {index < evolutionChain.length - 1 && (
-
-                    <div className="bg-gradient-to-b from-gray-700 to-gray-800 ring-2 ring-indigo-400   mt-4 md:mt-0 md:absolute md:top-1/2 md:right-[-2.5rem] md:transform md:-translate-y-1/2 z-50 text-2xl  px-4 py-1 rounded-full max-md:rotate-90">  <FaArrowRight  /></div>
-                 
+                  <div className="bg-gradient-to-b from-gray-700 to-gray-800 ring-2 ring-indigo-400 mt-4 md:mt-0 md:absolute md:top-1/2 md:right-[-2.5rem] md:transform md:-translate-y-1/2 z-50 text-2xl px-4 py-1 rounded-full max-md:rotate-90">
+                    <FaArrowRight />
+                  </div>
                 )}
               </div>
             ))}
