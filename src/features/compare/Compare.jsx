@@ -82,7 +82,7 @@ const ComparePokemons = () => {
           disabled={side === "left" ? leftLoading : rightLoading}
           className={`${side === "left" ? "bg-blue-400 hover:bg-blue-500" : "bg-red-400 hover:bg-red-500"} text-white rounded-l-none rounded-r-lg`}
         >
-          {(side === "left" ? leftLoading : rightLoading) ? "Loading..." : "Search"}
+          {(side === "left" ? leftLoading : rightLoading) ? "..." : "Search"}
         </Button>
       </form>
       <Button
