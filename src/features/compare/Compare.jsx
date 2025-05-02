@@ -249,10 +249,10 @@ const ComparePokemons = () => {
           {/* VS section */}
           <div className="sm:col-span-1 flex items-center justify-center my-2 sm:my-0">
             <div className="relative">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-indigo-800 flex items-center justify-center text-lg sm:text-xl font-black shadow-lg border-2 border-gray-800">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-indigo-800 flex items-center justify-center text-lg sm:text-xl font-black  border-2 border-gray-800">
                 VS
               </div>
-              <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-blue-600 to-red-600 -z-10 blur opacity-60 animate-pulse"></div>
+       
             </div>
           </div>
 
