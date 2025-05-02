@@ -79,7 +79,7 @@ const EvolutionTab = ({ evolutionChain, evolutionLoading, pokemon }) => {
 
                 {index < evolutionChain.length - 1 && (
 
-                    <div className="bg-gradient-to-b from-gray-700 to-gray-800 ring-2 ring-indigo-400   mt-4 md:mt-0 md:absolute md:top-1/2 md:right-[-2.5rem] md:transform md:-translate-y-1/2 z-50 text-2xl  px-4 py-1 rounded-full">  <FaArrowRight  /></div>
+                    <div className="bg-gradient-to-b from-gray-700 to-gray-800 ring-2 ring-indigo-400   mt-4 md:mt-0 md:absolute md:top-1/2 md:right-[-2.5rem] md:transform md:-translate-y-1/2 z-50 text-2xl  px-4 py-1 rounded-full max-md:rotate-90">  <FaArrowRight  /></div>
                  
                 )}
               </div>
