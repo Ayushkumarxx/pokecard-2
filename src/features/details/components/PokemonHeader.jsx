@@ -2,7 +2,7 @@ import React from "react";
 
 // Reusable PokemonHeader Component
 const PokemonHeader = ({ pokemon, getTypeColor }) => (
-  <div className="bg-[#1E1E1E] rounded-2xl shadow-2xl overflow-hidden mb-10 backdrop-blur-xl">
+  <div className="bg-[#1E1E1E] rounded-2xl shadow-sm overflow-hidden mb-10 backdrop-blur-xl">
     <div
       className="relative px-4 sm:px-6 py-8 sm:py-10"
       style={{
@@ -58,10 +58,10 @@ const PokemonHeader = ({ pokemon, getTypeColor }) => (
           </div>
 
           {/* Name and Genus */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold capitalize mb-2">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold capitalize mb-2">
             {pokemon.name}
           </h1>
-          <p className="text-lg sm:text-xl text-gray-300 mb-6">
+          <p className="text-lg sm:text-xl text-gray-300 mb-4 font-bold">
             {pokemon.species.genus}
           </p>
 
@@ -70,7 +70,7 @@ const PokemonHeader = ({ pokemon, getTypeColor }) => (
             {pokemon.types.map((type) => (
               <span
                 key={type}
-                className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium capitalize"
+                className="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold capitalize"
                 style={{
                   backgroundColor: `${getTypeColor(type)}44`,
                   color: getTypeColor(type),
@@ -84,7 +84,7 @@ const PokemonHeader = ({ pokemon, getTypeColor }) => (
 
           {/* Flavor Text */}
           <div className="bg-[#00000030] backdrop-blur-sm rounded-xl p-4 mb-6">
-            <p className="text-gray-300 leading-relaxed">
+            <p className="text-gray-300 leading-relaxed font-semibold">
               {pokemon.species.flavorText}
             </p>
           </div>
