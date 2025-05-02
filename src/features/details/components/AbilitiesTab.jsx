@@ -25,7 +25,7 @@ const AbilitiesTab = ({ pokemon }) => (
                   </span>
                 )}
               </div>
-              <p className="text-gray-400 leading-relaxed">
+              <p className="text-gray-400 leading-relaxed font-semibold text-sm">
                 {ability.isHidden
                   ? `This is a special hidden ability that rare ${pokemon.name} may possess. Hidden abilities often provide unique strategic advantages in battle.`
                   : `This is one of ${pokemon.name}'s standard abilities that helps it in battle and influences how it interacts with different move types and battle conditions.`}

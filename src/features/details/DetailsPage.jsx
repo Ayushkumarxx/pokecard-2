@@ -163,10 +163,10 @@ const PokemonDetailsPage = () => {
       <div className="max-w-6xl mx-auto">
         <Link
           to="/"
-          className="inline-flex items-center mb-8 text-indigo-400 hover:text-indigo-300 font-medium transition-colors duration-200"
+          className="inline-flex items-center mb-8 text-gray-300 font-bold hover:text-indigo-300  transition-colors duration-200"
         >
           <FaArrowLeft className="mr-2" />
-          Back to Pokédex
+          Back to Home
         </Link>
 
         <PokemonHeader pokemon={pokemon} getTypeColor={getTypeColor} />
