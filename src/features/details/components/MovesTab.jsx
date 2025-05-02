@@ -57,7 +57,7 @@ const MovesTab = ({
           <div className="mt-8 text-center">
             <button
               onClick={loadMoreMoves}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-xl transition-colors duration-200"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-xl transition-colors duration-200 font-bold"
             >
               Load More Moves ({visibleMoves} of {filteredMoves.length})
             </button>
