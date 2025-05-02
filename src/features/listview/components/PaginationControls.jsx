@@ -64,7 +64,7 @@ const PaginationControls = ({
           <button
             key={page}
             onClick={() => handlePageChange("goto", page)}
-            className={`w-9 h-9 max-md:text-[12px] flex items-center justify-center rounded-md font-semibold shadow-md transition-colors ${
+            className={`w-9 h-9 max-md:w-7 max-md:h-7 max-md:text-[12px] flex items-center justify-center rounded-md font-semibold shadow-md transition-colors ${
               pagination.currentPage === page
                 ? "bg-[#FFCB05] text-black font-bold"
                 : "bg-[#333] text-white hover:bg-[#444]"
