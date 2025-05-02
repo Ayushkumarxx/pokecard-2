@@ -39,7 +39,7 @@ const EvolutionTab = ({ evolutionChain, evolutionLoading, pokemon }) => {
                       }`}
                   >
                     <div className="flex flex-col items-center">
-                      <div className="mb-4 w-40 h-40 rounded-full bg-gray-600 flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:bg-gray-800">
+                      <div className="mb-4 w-40 h-40 rounded-full flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:bg-gray-800">
                         <img
                           src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${evo.id}.png`}
                           alt={evo.name}
@@ -53,7 +53,7 @@ const EvolutionTab = ({ evolutionChain, evolutionLoading, pokemon }) => {
                       <p className="text-sm text-gray-400 mb-1 font-mono">
                         #{evo.id.padStart(3, "0")}
                       </p>
-                      <p className="text-2xl font-semibold capitalize mb-3 text-white tracking-wide">
+                      <p className="text-[18px] font-extrabold capitalize mb-3 text-white tracking-wide">
                         {evo.name.replace("-", " ")}
                       </p>
 
