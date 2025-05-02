@@ -1,5 +1,5 @@
 const StatsTab = ({ pokemon }) => (
-  <div className="px-4 sm:px-2">
+  <div className="px-2 sm:px-6">
     <h2 className="text-2xl font-bold mb-10 text-center text-white">Base Stats</h2>
 
     <div className="max-w-3xl mx-auto space-y-8">
