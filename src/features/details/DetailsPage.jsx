@@ -110,18 +110,7 @@ const PokemonDetailsPage = () => {
     return typeColors[type] || "#A8A878";
   }, []);
 
-  const getStatGradient = useCallback((statName) => {
-    const statGradients = {
-      hp: "from-rose-600 to-pink-500",
-      attack: "from-orange-600 to-amber-500",
-      defense: "from-yellow-600 to-amber-500",
-      specialAttack: "from-blue-600 to-indigo-500",
-      specialDefense: "from-emerald-600 to-teal-500",
-      speed: "from-fuchsia-600 to-purple-500",
-    };
 
-    return statGradients[statName] || "from-gray-600 to-gray-500";
-  }, []);
 
   if (loading) {
     return (
@@ -186,7 +175,7 @@ const PokemonDetailsPage = () => {
 
         <div className="bg-[#1E1E1E] rounded-2xl shadow-2xl p-8 mb-8">
           {activeTab === "stats" && (
-            <StatsTab pokemon={pokemon} getStatGradient={getStatGradient} />
+            <StatsTab pokemon={pokemon}  />
           )}
           {activeTab === "evolution" && (
             <EvolutionTab

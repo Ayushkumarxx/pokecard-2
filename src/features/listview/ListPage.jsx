@@ -9,6 +9,7 @@ import Footer from "./components/Footer";
 import SectionLoader from "../../shared/components/SectionLoader";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import usePokemonTypes from "../../shared/hooks/usePokemonTypes";
+import PaginationControls from "./components/PaginationControls";
 
 const ListPage = () => {
   // State for filters and UI state
@@ -232,85 +233,18 @@ useEffect(() => {
         </div>
 
         {/* Bottom pagination controls for large result sets */}
-        {filteredPokemon && filteredPokemon.length > 0 && (
-          <div className="flex flex-col sm:flex-row justify-between items-center mt-8 bg-[#1A1A1A] p-4 rounded-lg shadow-sm">
-            {/* Items per page selector */}
-            <div className="items-per-page-selector mb-4 sm:mb-0 ">
-              <label className="text-gray-300 mr-2 font-bold">
-                Items per page:
-              </label>
-              <select
-                value={itemsPerPage}
-                onChange={handleItemsPerPageChange}
-                className="bg-[#2A2A2A] text-white border border-[#3B4CCA] rounded px-3 py-1 focus:outline-none focus:ring-2 focus:ring-[#FFCB05] font-bold"
-              >
-                <option value={10}>10</option>
-                <option value={20}>20</option>
-                <option value={50}>50</option>
-              </select>
-            </div>
+        {filteredPokemon.length > 0 && (
+  <PaginationControls
+    itemsPerPage={itemsPerPage}
+    handleItemsPerPageChange={handleItemsPerPageChange}
+    handlePageChange={handlePageChange}
+    pagination={pagination}
+    totalPages={totalPages}
+    selectedTypes={selectedTypes}
+    show={filteredPokemon.length > 0}
+  />
+)}
 
-            {/* Pagination controls */}
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => handlePageChange("prev")}
-                disabled={pagination.currentPage === 1}
-                className="px-3 py-1 bg-[#3B4CCA] text-white rounded-md disabled:opacity-50 hover:bg-[#2A3CAA] transition-colors shadow-md flex items-center font-bold gap-2 cursor-pointer"
-              >
-                <FaArrowLeft />
-                Prev
-              </button>
-
-              {/* Show page numbers */}
-              <div className="flex space-x-1">
-                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                  // Calculate which page numbers to show
-                  let pageNum;
-                  if (totalPages <= 5) {
-                    pageNum = i + 1;
-                  } else if (pagination.currentPage <= 3) {
-                    pageNum = i + 1;
-                  } else if (pagination.currentPage >= totalPages - 2) {
-                    pageNum = totalPages - 4 + i;
-                  } else {
-                    pageNum = pagination.currentPage - 2 + i;
-                  }
-
-                  return (
-                    <button
-                      key={pageNum}
-                      onClick={() => handlePageChange("goto", pageNum)}
-                      className={`w-9 h-9 flex items-center justify-center rounded-md transition-colors shadow-md  font-semibold cursor-pointer ${
-                        pagination.currentPage === pageNum
-                          ? "bg-[#FFCB05] text-black font-bold"
-                          : "bg-[#333] text-white hover:bg-[#444]"
-                      }`}
-                    >
-                      {pageNum}
-                    </button>
-                  );
-                })}
-              </div>
-
-              <button
-                onClick={() => handlePageChange("next")}
-                disabled={pagination.currentPage === totalPages}
-                className="px-3 py-1 bg-[#3B4CCA] text-white rounded-md disabled:opacity-50 hover:bg-[#2A3CAA] transition-colors shadow-md flex items-center font-semibold gap-2 cursor-pointer"
-              >
-                Next
-                <FaArrowRight />
-              </button>
-            </div>
-
-            {/* Page info */}
-            <div className="text-gray-300 mt-4 sm:mt-0 hidden sm:block font-bold">
-              Page {pagination.currentPage} of{" "}
-              {selectedTypes.length > 0
-                ? pagination.filteredTotalPages
-                : pagination.totalPages}
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Footer with PokeAPI attribution */}

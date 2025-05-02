@@ -1,64 +1,87 @@
 import { Link } from "react-router-dom";
+import { FaExclamationTriangle, FaArrowRight } from "react-icons/fa";
 
-const EvolutionTab = ({ evolutionChain, evolutionLoading, pokemon }) => (
-    <div>
-      <h2 className="text-2xl font-bold mb-10 text-center">Evolution Chain</h2>
-      
+const EvolutionTab = ({ evolutionChain, evolutionLoading, pokemon }) => {
+  return (
+    <div className="py-8">
+      <h2 className="text-2xl font-bold mb-10 text-center">
+        Evolution Chain
+      </h2>
+
       {evolutionLoading ? (
         <div className="flex justify-center items-center h-64">
-          <div className="w-12 h-12 border-t-4 border-r-4 border-indigo-500 rounded-full animate-spin"></div>
+          <div className="w-14 h-14 border-t-4 border-r-4 border-indigo-400 rounded-full animate-spin"></div>
         </div>
       ) : evolutionChain.length <= 1 ? (
-        <div className="flex flex-col justify-center items-center h-64 bg-[#2A2A2A] rounded-xl">
-          <svg className="w-16 h-16 text-gray-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-          </svg>
-          <p className="text-lg text-gray-400">This Pokémon does not evolve.</p>
+        <div className="flex flex-col justify-center items-center h-64 bg-gray-800 rounded-2xl shadow-lg transition-all duration-300">
+          <FaExclamationTriangle className="w-16 h-16 text-gray-500 mb-4" />
+          <p className="text-xl text-gray-300 font-medium">
+            This Pokémon does not evolve.
+          </p>
         </div>
       ) : (
-        <div className="max-w-5xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-around items-center md:items-start">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-6 md:gap-8">
             {evolutionChain.map((evo, index) => (
-              <div key={evo.id} className="relative mb-8 md:mb-0 max-w-xs w-full">
-                <Link 
-                  to={`/pokemon/${evo.id}`} 
-                  className={`block relative z-10 h-full`}
+              <div
+                key={evo.id}
+                className="relative flex flex-col items-center mb-8 md:mb-0 max-w-xs w-full"
+              >
+                <Link
+                  to={`/pokemon/${evo.id}`}
+                  className="block relative z-10 w-full group"
                 >
-                  <div 
-                    className={`h-full p-6 rounded-xl transition-all duration-300
-                      ${evo.id === pokemon.id.toString() 
-                        ? 'bg-gradient-to-b from-[#333333] to-[#2A2A2A] ring-2 ring-indigo-500 shadow-lg' 
-                        : 'bg-[#2A2A2A] hover:bg-[#333333]'}`}
+                  <div
+                    className={`p-6 rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl
+                      ${
+                        evo.id === pokemon.id.toString()
+                          ? "bg-gradient-to-b from-gray-700 to-[#121212] ring-2 ring-indigo-400 shadow-xl"
+                          : "bg-gradient-to-b from-[#121212] to-gray-800 group-hover:bg-gray-700"
+                      }`}
                   >
                     <div className="flex flex-col items-center">
-                      <div className="mb-4 w-36 h-36 rounded-full bg-[#222222] flex items-center justify-center overflow-hidden">
-                        <img 
-                          src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${evo.id}.png`} 
+                      <div className="mb-4 w-40 h-40 rounded-full bg-gray-600 flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:bg-gray-800">
+                        <img
+                          src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${evo.id}.png`}
                           alt={evo.name}
-                          className="w-28 h-28 object-contain" 
+                          className="w-32 h-32 object-contain transform group-hover:scale-110 transition-transform duration-300"
                           onError={(e) => {
                             e.target.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evo.id}.png`;
                           }}
                         />
                       </div>
-                      
-                      <p className="text-sm text-gray-400 mb-1">#{evo.id.padStart(3, '0')}</p>
-                      <p className="text-xl font-medium capitalize mb-3">{evo.name.replace('-', ' ')}</p>
-                      
+
+                      <p className="text-sm text-gray-400 mb-1 font-mono">
+                        #{evo.id.padStart(3, "0")}
+                      </p>
+                      <p className="text-2xl font-semibold capitalize mb-3 text-white tracking-wide">
+                        {evo.name.replace("-", " ")}
+                      </p>
+
                       {index > 0 && (
-                        <div className="mt-2 py-1 px-3 bg-[#222222] rounded-lg text-center">
-                          <p className="text-sm text-indigo-400">
-                            {evo.min_level ? `Level ${evo.min_level}` : 
-                             evo.trigger === 'use-item' && evo.item ? `Use ${evo.item.replace('-', ' ')}` : 
-                             evo.trigger === 'trade' ? 'Trade' :
-                             evo.trigger ? evo.trigger.replace('-', ' ') : 
-                             'Special condition'}
+                        <div className="mt-2 py-2 px-4 bg-gray-900 rounded-lg text-center transition-all duration-300 group-hover:bg-gray-800">
+                          <p className="text-sm text-indigo-300 font-medium">
+                            {evo.min_level
+                              ? `Level ${evo.min_level}`
+                              : evo.trigger === "use-item" && evo.item
+                              ? `Use ${evo.item.replace("-", " ")}`
+                              : evo.trigger === "trade"
+                              ? "Trade"
+                              : evo.trigger
+                              ? evo.trigger.replace("-", " ")
+                              : "Special condition"}
                           </p>
                         </div>
                       )}
                     </div>
                   </div>
                 </Link>
+
+                {index < evolutionChain.length - 1 && (
+
+                    <div className="bg-gradient-to-b from-gray-700 to-gray-800 ring-2 ring-indigo-400   mt-4 md:mt-0 md:absolute md:top-1/2 md:right-[-2.5rem] md:transform md:-translate-y-1/2 z-50 text-2xl  px-4 py-1 rounded-full">  <FaArrowRight  /></div>
+                 
+                )}
               </div>
             ))}
           </div>
@@ -66,5 +89,6 @@ const EvolutionTab = ({ evolutionChain, evolutionLoading, pokemon }) => (
       )}
     </div>
   );
+};
 
-  export default EvolutionTab
+export default EvolutionTab;
