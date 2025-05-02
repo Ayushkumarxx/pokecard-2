@@ -2,7 +2,7 @@ import React from "react";
 import Exports from "../utils/export";
 import { useNavigate } from "react-router-dom";
 import { FaHeart } from "react-icons/fa6";
-
+import { FaCodeCompare } from "react-icons/fa6";
 /**
  * Navbar Component
  * Displays logo, site title, and the search bar.
@@ -28,6 +28,18 @@ const Navbar = ({ onSearch }) => {
         >
           <FaHeart className="text-gray-300 text-[20px] md:text-[20px] " />{" "}
           <p className="text-gray-300 text-[14px] font-bold">{window.innerWidth > 768 ? "Favorites" : "Favs"}</p>
+
+
+        </button>
+
+        <button
+          className="py-3 px-4 max-md:px-3 bg-[#333333] rounded-full cursor-pointer flex gap-2 items-center "
+          onClick={() => navigate("/compare")}
+        >
+          <FaCodeCompare className="text-gray-300 text-[20px] md:text-[20px] " />{" "}
+          
+
+          
         </button>
       </div>
     </nav>

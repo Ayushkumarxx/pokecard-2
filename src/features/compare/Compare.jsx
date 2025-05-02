@@ -8,7 +8,7 @@ import TypeBadge from "./components/TypeBadge";
 // Reusable Card Component
 const Card = ({ children, gradient, className = "" }) => (
   <div
-    className={`bg-gradient-to-br rounded-xl p-4 shadow-lg border border-gray-700 ${className}`}
+    className={`bg-gradient-to-br rounded-2xl p-4 shadow-lg border border-gray-700 ${className}`}
     style={{ background: gradient }}
   >
     {children}

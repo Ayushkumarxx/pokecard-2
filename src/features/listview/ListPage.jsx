@@ -19,7 +19,10 @@ const ListPage = () => {
   const [filteredPokemon, setFilteredPokemon] = useState(null); // Initialize as null instead of empty array
 
   // Add state for tracking sort configuration
-const [sortConfig, setSortConfig] = useState({ field: 'id', direction: 'asc' });
+  const [sortConfig, setSortConfig] = useState({
+    field: "id",
+    direction: "asc",
+  });
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [sectionLoading, setSectionLoading] = useState(false);
 
@@ -59,94 +62,101 @@ const [sortConfig, setSortConfig] = useState({ field: 'id', direction: 'asc' });
   }, [pokemonTypes]);
 
   // Filter and fetch specific Pokémon when searchTerm or selectedTypes change
-// Modified handleSort to update sortConfig state
-const handleSort = (field, direction) => {
-  if (!filteredPokemon || filteredPokemon.length === 0) return;
+  // Modified handleSort to update sortConfig state
+  const handleSort = (field, direction) => {
+    if (!filteredPokemon || filteredPokemon.length === 0) return;
 
-  let sortedPokemon = [...filteredPokemon];
+    let sortedPokemon = [...filteredPokemon];
 
-  switch (field) {
-    case 'id':
-      sortedPokemon.sort((a, b) => {
-        return direction === 'asc' ? a.id - b.id : b.id - a.id;
-      });
-      break;
-    case 'alphabetical':
-      sortedPokemon.sort((a, b) => {
-        return direction === 'asc' 
-          ? a.name.localeCompare(b.name) 
-          : b.name.localeCompare(a.name);
-      });
-      break;
-    default:
-      // Default sort by id ascending
-      sortedPokemon.sort((a, b) => a.id - b.id);
-  }
-
-  setSortConfig({ field, direction });
-  setFilteredPokemon(sortedPokemon);
-};
-
-// Modified useEffect to apply current sort when filters change
-useEffect(() => {
-  const filterAndFetch = async () => {
-    // Only proceed if we have Pokémon data
-    if (!pokemon || pokemon.length === 0) return;
-
-    let results = pokemon;
-
-    // Filter by search term
-    if (searchTerm.trim() !== "") {
-      results = results.filter((p) =>
-        p.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+    switch (field) {
+      case "id":
+        sortedPokemon.sort((a, b) => {
+          return direction === "asc" ? a.id - b.id : b.id - a.id;
+        });
+        break;
+      case "alphabetical":
+        sortedPokemon.sort((a, b) => {
+          return direction === "asc"
+            ? a.name.localeCompare(b.name)
+            : b.name.localeCompare(a.name);
+        });
+        break;
+      default:
+        // Default sort by id ascending
+        sortedPokemon.sort((a, b) => a.id - b.id);
     }
 
-    // Filter by types
-    if (selectedTypes.length > 0) {
-      setSectionLoading(true);
-      results = await fetchPokemonList(selectedTypes);
-    }
-
-    // If no results, try to fetch specific Pokémon (only once)
-    if (results.length === 0 && searchTerm?.trim().length > 3) {
-      const fetched = await fetchSpecificPokemon(searchTerm.trim());
-      if (
-        fetched &&
-        (selectedTypes.length === 0 ||
-          fetched.types.some((type) => selectedTypes.includes(type)))
-      ) {
-        results = [fetched];
-      }
-    }
-
-    // Apply current sort configuration to the filtered results
-    if (results.length > 0 && sortConfig.field) {
-      switch (sortConfig.field) {
-        case 'id':
-          results.sort((a, b) => {
-            return sortConfig.direction === 'asc' ? a.id - b.id : b.id - a.id;
-          });
-          break;
-        case 'alphabetical':
-          results.sort((a, b) => {
-            return sortConfig.direction === 'asc' 
-              ? a.name.localeCompare(b.name) 
-              : b.name.localeCompare(a.name);
-          });
-          break;
-        default:
-          break;
-      }
-    }
-
-    setFilteredPokemon(results);
-    setSectionLoading(false);
+    setSortConfig({ field, direction });
+    setFilteredPokemon(sortedPokemon);
   };
 
-  filterAndFetch();
-  // Add sortConfig to dependencies if you want sorting to trigger re-filtering
-}, [pokemon, searchTerm, selectedTypes, fetchSpecificPokemon]);
+  // Modified useEffect to apply current sort when filters change
+  useEffect(() => {
+    const filterAndFetch = async () => {
+      // Only proceed if we have Pokémon data
+      if (!pokemon || pokemon.length === 0) return;
+
+      let results = pokemon;
+
+      // Filter by search term
+      if (searchTerm.trim() !== "") {
+        results = results.filter((p) =>
+          p.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      }
+
+      // Filter by types
+      if (selectedTypes.length > 0) {
+        if (searchTerm.trim() && results.length > 0) {
+          setSectionLoading(true);
+          results = results.filter((p) =>
+            p.types.some((type) => selectedTypes.includes(type))
+          );
+        } else {
+          setSectionLoading(true);
+          results = await fetchPokemonList(selectedTypes);
+        }
+      }
+
+      // If no results, try to fetch specific Pokémon (only once)
+      if (results.length === 0 && searchTerm?.trim().length > 3) {
+        const fetched = await fetchSpecificPokemon(searchTerm.trim());
+        if (
+          fetched &&
+          (selectedTypes.length === 0 ||
+            fetched.types.some((type) => selectedTypes.includes(type)))
+        ) {
+          results = [fetched];
+        }
+      }
+
+      // Apply current sort configuration to the filtered results
+      if (results.length > 0 && sortConfig.field) {
+        switch (sortConfig.field) {
+          case "id":
+            results.sort((a, b) => {
+              return sortConfig.direction === "asc" ? a.id - b.id : b.id - a.id;
+            });
+            break;
+          case "alphabetical":
+            results.sort((a, b) => {
+              return sortConfig.direction === "asc"
+                ? a.name.localeCompare(b.name)
+                : b.name.localeCompare(a.name);
+            });
+            break;
+          default:
+            break;
+        }
+      }
+
+      setFilteredPokemon(results);
+      setSectionLoading(false);
+    };
+
+    filterAndFetch();
+    // Add sortConfig to dependencies if you want sorting to trigger re-filtering
+  }, [pokemon, searchTerm, selectedTypes, fetchSpecificPokemon]);
 
   // Function to handle search term input changes
   const handleSearch = (term) => {
@@ -166,9 +176,6 @@ useEffect(() => {
     setSelectedTypes([]);
   };
 
-
-
-  
   // Function to handle items per page change
   const handleItemsPerPageChange = (event) => {
     const newValue = parseInt(event.target.value, 10);
@@ -234,17 +241,16 @@ useEffect(() => {
 
         {/* Bottom pagination controls for large result sets */}
         {filteredPokemon.length > 0 && (
-  <PaginationControls
-    itemsPerPage={itemsPerPage}
-    handleItemsPerPageChange={handleItemsPerPageChange}
-    handlePageChange={handlePageChange}
-    pagination={pagination}
-    totalPages={totalPages}
-    selectedTypes={selectedTypes}
-    show={filteredPokemon.length > 0}
-  />
-)}
-
+          <PaginationControls
+            itemsPerPage={itemsPerPage}
+            handleItemsPerPageChange={handleItemsPerPageChange}
+            handlePageChange={handlePageChange}
+            pagination={pagination}
+            totalPages={totalPages}
+            selectedTypes={selectedTypes}
+            show={filteredPokemon.length > 0}
+          />
+        )}
       </div>
 
       {/* Footer with PokeAPI attribution */}
