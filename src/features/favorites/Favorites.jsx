@@ -70,7 +70,7 @@ const FavoritesPage = () => {
         <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
           Your Favorite Pokémon
         </h1>
-        <div className="h-1 w-32 mb-8 rounded-full bg-text-gray"></div>
+        <div className="h-[4px] w-32 mb-8 rounded-full bg-white"></div>
 
         {likedIds.length === 0 ? (
           <div className="flex flex-col items-center justify-center min-h-[60vh]">
