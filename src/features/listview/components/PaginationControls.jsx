@@ -34,7 +34,7 @@ const PaginationControls = ({
     <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-between items-center mt-8 bg-[#1A1A1A] p-4 max-md:px-2 rounded-lg shadow-sm">
       
       {/* Items per page */}
-      <div className="flex items-center text-white font-bold">
+      <div className="flex items-center text-white font-bold text-sm">
         <label htmlFor="items-per-page" className="mr-2">
           Items per page:
         </label>
@@ -84,7 +84,7 @@ const PaginationControls = ({
       </div>
 
       {/* Page info */}
-      <div className="text-gray-300 font-bold text-center sm:text-left">
+      <div className="text-gray-300 font-bold text-center sm:text-left tc">
         Page {pagination.currentPage} of{" "}
         {selectedTypes.length > 0
           ? pagination.filteredTotalPages
