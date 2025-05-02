@@ -51,7 +51,7 @@ const PaginationControls = ({
       </div>
 
       {/* Pagination buttons */}
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2 max-md:gap-1">
         <button
           onClick={() => handlePageChange("prev")}
           disabled={pagination.currentPage === 1}

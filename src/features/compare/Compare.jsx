@@ -1,8 +1,87 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import usePokemonDetail from '../../shared/hooks/usePokemonDetail';
 
+// Reusable Button Component
+const Button = ({ onClick, disabled, className, children }) => (
+  <button
+    onClick={onClick}
+    disabled={disabled}
+    className={`py-3 px-4 rounded-lg font-bold focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-70 shadow-md transition-colors duration-200 ${className}`}
+  >
+    {children}
+  </button>
+);
+
+// Reusable Back Button Component
+const BackButton = ({ onClick }) => (
+  <Button 
+    onClick={onClick} 
+    className="bg-gray-800 hover:bg-gray-700 text-white flex items-center gap-2 rounded-full px-4 py-2 absolute top-6 left-6 z-10"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+    </svg>
+    Back
+  </Button>
+);
+
+// Reusable Card Component
+const Card = ({ children, gradient, className }) => (
+  <div className={`bg-gradient-to-br ${gradient} rounded-2xl p-6 shadow-xl border border-gray-700 ${className}`}>
+    {children}
+  </div>
+);
+
+// Reusable Stat Bar Component
+const StatBar = ({ value, maxValue = 255, color }) => {
+  const percentage = Math.min(100, (value / maxValue) * 100);
+  
+  return (
+    <div className="flex items-center w-full">
+      <div className="w-full bg-gray-800 rounded-full h-5 overflow-hidden shadow-inner">
+        <div
+          className={`h-5 rounded-full ${color} transition-all duration-500`}
+          style={{ width: `${percentage}%` }}
+        ></div>
+      </div>
+      <span className="text-sm font-bold text-white ml-2">{value}</span>
+    </div>
+  );
+};
+
+// Reusable Type Badge Component
+const TypeBadge = ({ type }) => {
+  const typeColors = {
+    normal: 'bg-gray-400',
+    fire: 'bg-red-500',
+    water: 'bg-blue-500',
+    electric: 'bg-yellow-400',
+    grass: 'bg-green-500',
+    ice: 'bg-blue-200 text-gray-800',
+    fighting: 'bg-red-700',
+    poison: 'bg-purple-600',
+    ground: 'bg-yellow-600',
+    flying: 'bg-indigo-400',
+    psychic: 'bg-pink-500',
+    bug: 'bg-green-600',
+    rock: 'bg-yellow-700',
+    ghost: 'bg-purple-800',
+    dragon: 'bg-indigo-700',
+    dark: 'bg-gray-800',
+    steel: 'bg-gray-500',
+    fairy: 'bg-pink-300 text-gray-800',
+    '???': 'bg-gray-400'
+  };
+
+  return (
+    <span className={`${typeColors[type] || 'bg-gray-400'} text-white text-xs font-bold px-3 py-1 rounded-full mr-1 uppercase shadow-md`}>
+      {type}
+    </span>
+  );
+};
+
 const ComparePokemons = () => {
-  // State for search inputs
+  // State for search inputs - controlled components
   const [leftSearchInput, setLeftSearchInput] = useState('');
   const [rightSearchInput, setRightSearchInput] = useState('');
   
@@ -24,81 +103,80 @@ const ComparePokemons = () => {
   } = usePokemonDetail();
 
   // Function to handle left Pokémon search
-  const handleLeftSearch = (e) => {
+  const handleLeftSearch = useCallback((e) => {
     e.preventDefault();
     if (leftSearchInput.trim()) {
       fetchLeftPokemon(leftSearchInput.trim());
     }
-  };
+  }, [leftSearchInput, fetchLeftPokemon]);
 
   // Function to handle right Pokémon search
-  const handleRightSearch = (e) => {
+  const handleRightSearch = useCallback((e) => {
     e.preventDefault();
     if (rightSearchInput.trim()) {
       fetchRightPokemon(rightSearchInput.trim());
     }
-  };
+  }, [rightSearchInput, fetchRightPokemon]);
 
   // Function to get random Pokémon (ID between 1 and 898)
-  const getRandomPokemon = () => {
+  const getRandomPokemon = useCallback(() => {
     return Math.floor(Math.random() * 898) + 1;
-  };
+  }, []);
 
   // Function to fetch random Pokémon for left side
-  const handleRandomLeft = () => {
+  const handleRandomLeft = useCallback(() => {
     const randomId = getRandomPokemon();
     setLeftSearchInput(randomId.toString());
     fetchLeftPokemon(randomId);
-  };
+  }, [getRandomPokemon, fetchLeftPokemon]);
 
   // Function to fetch random Pokémon for right side
-  const handleRandomRight = () => {
+  const handleRandomRight = useCallback(() => {
     const randomId = getRandomPokemon();
     setRightSearchInput(randomId.toString());
     fetchRightPokemon(randomId);
-  };
+  }, [getRandomPokemon, fetchRightPokemon]);
 
   // Helper function to determine stat color based on comparison
-  const getStatColor = (stat1, stat2) => {
+  const getStatColor = useCallback((stat1, stat2) => {
     if (!stat1 || !stat2) return 'bg-gray-600';
     if (stat1 > stat2) return 'bg-green-500';
     if (stat1 < stat2) return 'bg-red-500';
     return 'bg-yellow-400';
-  };
+  }, []);
 
-  // Component to render type badges
-  const TypeBadge = ({ type }) => {
-    const typeColors = {
-      normal: 'bg-gray-400',
-      fire: 'bg-red-500',
-      water: 'bg-blue-500',
-      electric: 'bg-yellow-400',
-      grass: 'bg-green-500',
-      ice: 'bg-blue-200 text-gray-800',
-      fighting: 'bg-red-700',
-      poison: 'bg-purple-600',
-      ground: 'bg-yellow-600',
-      flying: 'bg-indigo-400',
-      psychic: 'bg-pink-500',
-      bug: 'bg-green-600',
-      rock: 'bg-yellow-700',
-      ghost: 'bg-purple-800',
-      dragon: 'bg-indigo-700',
-      dark: 'bg-gray-800',
-      steel: 'bg-gray-500',
-      fairy: 'bg-pink-300 text-gray-800',
-      '???': 'bg-gray-400'
-    };
+  // Return to home page (or previous page)
+  const handleBack = useCallback(() => {
+    // You can replace this with your navigation logic
+    window.history.back();
+    // Alternatively if using React Router: navigate('/')
+  }, []);
 
+  // Function to render stat bars with comparison highlighting
+  const renderStatBars = useCallback((statName, leftStat, rightStat, maxStat = 255) => {
+    const leftColor = getStatColor(leftStat, rightStat);
+    const rightColor = getStatColor(rightStat, leftStat);
+    
     return (
-      <span className={`${typeColors[type] || 'bg-gray-400'} text-white text-xs font-bold px-3 py-1 rounded-full mr-1 uppercase shadow-md`}>
-        {type}
-      </span>
+      <div className="grid grid-cols-11 gap-2 mb-3 items-center">
+        <div className="col-span-5">
+          <div className="flex items-center w-full justify-end">
+            <span className="text-sm font-bold text-white mr-2">{leftStat}</span>
+            <StatBar value={leftStat} maxValue={maxStat} color={leftColor} />
+          </div>
+        </div>
+        
+        <div className="col-span-1 text-center font-bold text-white">{statName}</div>
+        
+        <div className="col-span-5">
+          <StatBar value={rightStat} maxValue={maxStat} color={rightColor} />
+        </div>
+      </div>
     );
-  };
+  }, [getStatColor]);
 
   // Component for search box (reusable)
-  const SearchBox = ({ 
+  const SearchBox = useCallback(({ 
     searchInput, 
     setSearchInput, 
     handleSearch, 
@@ -108,7 +186,10 @@ const ComparePokemons = () => {
     placeholderText,
     side
   }) => (
-    <div className={`bg-gradient-to-br ${side === 'left' ? 'from-blue-900 to-blue-700' : 'from-red-900 to-red-700'} rounded-2xl p-5 mb-4 shadow-xl`}>
+    <Card 
+      gradient={side === 'left' ? 'from-blue-900 to-blue-700' : 'from-red-900 to-red-700'} 
+      className="mb-4"
+    >
       <form onSubmit={handleSearch} className="flex mb-3">
         <input
           type="text"
@@ -117,93 +198,53 @@ const ComparePokemons = () => {
           placeholder={placeholderText}
           className="flex-grow p-3 rounded-l-lg bg-gray-800 text-white border-2 border-gray-700 focus:outline-none focus:border-blue-500 font-medium"
         />
-        <button
-          type="submit"
+        <Button
           disabled={loading}
-          className={`${side === 'left' ? 'bg-blue-500 hover:bg-blue-600' : 'bg-red-500 hover:bg-red-600'} text-white py-3 px-6 rounded-r-lg font-bold focus:outline-none focus:ring-2 focus:ring-offset-2 ${side === 'left' ? 'focus:ring-blue-600' : 'focus:ring-red-600'} disabled:opacity-70 transition-colors duration-200`}
+          className={`${side === 'left' ? 'bg-blue-500 hover:bg-blue-600' : 'bg-red-500 hover:bg-red-600'} text-white rounded-l-none rounded-r-lg`}
         >
           {loading ? 'Loading...' : 'Search'}
-        </button>
+        </Button>
       </form>
-      <button
+      <Button
         onClick={handleRandom}
         disabled={loading}
-        className={`w-full ${side === 'left' ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-pink-600 hover:bg-pink-700'} text-white py-3 px-4 rounded-lg font-bold focus:outline-none focus:ring-2 focus:ring-offset-2 ${side === 'left' ? 'focus:ring-indigo-600' : 'focus:ring-pink-600'} disabled:opacity-70 shadow-md transition-colors duration-200`}
+        className={`w-full ${side === 'left' ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-pink-600 hover:bg-pink-700'} text-white`}
       >
         Random Pokémon
-      </button>
+      </Button>
       {error && <p className="text-yellow-300 mt-2 text-sm font-medium">{error}</p>}
-    </div>
-  );
-
-  // Function to render stat bars with comparison highlighting
-  const renderStatBars = (statName, leftStat, rightStat, maxStat = 255) => {
-    const leftPercentage = Math.min(100, (leftStat / maxStat) * 100);
-    const rightPercentage = Math.min(100, (rightStat / maxStat) * 100);
-    
-    const leftColor = getStatColor(leftStat, rightStat);
-    const rightColor = getStatColor(rightStat, leftStat);
-    
-    return (
-      <div className="grid grid-cols-11 gap-2 mb-3 items-center">
-        <div className="col-span-5">
-          <div className="flex items-center w-full justify-end">
-            <span className="text-sm font-bold text-white mr-2">{leftStat}</span>
-            <div className="w-full bg-gray-800 rounded-full h-5 overflow-hidden shadow-inner">
-              <div
-                className={`h-5 rounded-full ${leftColor} transition-all duration-500`}
-                style={{ width: `${leftPercentage}%` }}
-              ></div>
-            </div>
-          </div>
-        </div>
-        
-        <div className="col-span-1 text-center font-bold text-white">{statName}</div>
-        
-        <div className="col-span-5">
-          <div className="flex items-center w-full">
-            <div className="w-full bg-gray-800 rounded-full h-5 overflow-hidden shadow-inner">
-              <div
-                className={`h-5 rounded-full ${rightColor} transition-all duration-500`}
-                style={{ width: `${rightPercentage}%` }}
-              ></div>
-            </div>
-            <span className="text-sm font-bold text-white ml-2">{rightStat}</span>
-          </div>
-        </div>
-      </div>
-    );
-  };
+    </Card>
+  ), []);
 
   // Component for Pokémon card (reusable)
-  const PokemonCard = ({ pokemon, loading, side }) => {
+  const PokemonCard = useCallback(({ pokemon, loading, side }) => {
     const cardGradient = side === 'left' 
       ? 'from-blue-800 to-blue-900' 
       : 'from-red-800 to-red-900';
     
     if (loading) {
       return (
-        <div className={`bg-gradient-to-br ${cardGradient} rounded-2xl p-6 animate-pulse shadow-xl`}>
+        <Card gradient={cardGradient} className="animate-pulse">
           <div className="h-48 bg-gray-700 rounded-xl mb-4"></div>
           <div className="h-6 bg-gray-700 rounded w-3/4 mb-2"></div>
           <div className="h-4 bg-gray-700 rounded w-1/2"></div>
-        </div>
+        </Card>
       );
     }
 
     if (!pokemon) {
       return (
-        <div className={`bg-gradient-to-br ${cardGradient} rounded-2xl p-8 flex flex-col items-center justify-center min-h-[400px] shadow-xl border-2 border-gray-700`}>
+        <Card gradient={cardGradient} className="flex flex-col items-center justify-center min-h-[400px] border-2 border-gray-700">
           <div className="text-white text-center">
             <p className="text-2xl font-bold mb-3">No Pokémon Selected</p>
             <p className="text-sm opacity-80">Search by name or ID to compare</p>
           </div>
-        </div>
+        </Card>
       );
     }
 
     return (
-      <div className={`bg-gradient-to-br ${cardGradient} rounded-2xl p-6 shadow-xl border border-gray-700`}>
+      <Card gradient={cardGradient}>
         <div className="relative">
           {/* Badge for legendary/mythical status */}
           {(pokemon.species.isLegendary || pokemon.species.isMythical) && (
@@ -263,13 +304,33 @@ const ComparePokemons = () => {
             {pokemon.species.flavorText}
           </p>
         </div>
-      </div>
+      </Card>
     );
-  };
+  }, []);
+
+  // AbilityItem component
+  const AbilityItem = useCallback(({ name, isHidden, side }) => (
+    <div className={`bg-${side === 'left' ? 'blue' : 'red'}-900 bg-opacity-30 p-3 rounded-xl capitalize font-medium flex justify-between items-center`}>
+      {name}
+      {isHidden && 
+        <span className={`text-xs bg-${side === 'left' ? 'blue' : 'red'}-600 rounded-full px-2 py-1 font-bold`}>Hidden</span>
+      }
+    </div>
+  ), []);
+
+  // EggGroup component
+  const EggGroup = useCallback(({ name, side }) => (
+    <span className={`bg-${side === 'left' ? 'blue' : 'red'}-700 text-xs font-bold rounded-full px-3 py-1 capitalize`}>
+      {name}
+    </span>
+  ), []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white relative">
+      {/* Back Button */}
+      <BackButton onClick={handleBack} />
+      
+      <div className="max-w-7xl mx-auto px-4 py-8 pt-20">
         {/* Header */}
         <div className="text-center mb-10">
           <h1 className="text-4xl font-extrabold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-red-500">Pokémon Battle Analyzer</h1>
@@ -318,7 +379,7 @@ const ComparePokemons = () => {
         
         {/* Stats comparison section */}
         {leftPokemon && rightPokemon && (
-          <div className="mt-10 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 shadow-2xl border border-gray-700">
+          <Card gradient="from-gray-800 to-gray-900" className="mt-10 p-8">
             <h2 className="text-3xl font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-red-400">Stats Comparison</h2>
             
             <div className="grid grid-cols-11 gap-2 mb-6 items-center">
@@ -348,26 +409,26 @@ const ComparePokemons = () => {
                 720 // Max possible total stats
               )}
             </div>
-          </div>
+          </Card>
         )}
         
         {/* Additional comparison sections */}
         {leftPokemon && rightPokemon && (
           <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Abilities comparison */}
-            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 shadow-2xl border border-gray-700">
+            <Card gradient="from-gray-800 to-gray-900" className="p-6">
               <h2 className="text-2xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-red-400">Abilities</h2>
               <div className="grid grid-cols-2 gap-6">
                 <div>
                   <h3 className="text-center text-lg font-bold mb-3 capitalize text-blue-400">{leftPokemon.name}</h3>
                   <div className="space-y-3">
                     {leftPokemon.abilities.map(ability => (
-                      <div key={ability.name} className="bg-blue-900 bg-opacity-30 p-3 rounded-xl capitalize font-medium flex justify-between items-center">
-                        {ability.name}
-                        {ability.isHidden && 
-                          <span className="text-xs bg-blue-600 rounded-full px-2 py-1 font-bold">Hidden</span>
-                        }
-                      </div>
+                      <AbilityItem 
+                        key={ability.name} 
+                        name={ability.name} 
+                        isHidden={ability.isHidden} 
+                        side="left" 
+                      />
                     ))}
                   </div>
                 </div>
@@ -375,20 +436,20 @@ const ComparePokemons = () => {
                   <h3 className="text-center text-lg font-bold mb-3 capitalize text-red-400">{rightPokemon.name}</h3>
                   <div className="space-y-3">
                     {rightPokemon.abilities.map(ability => (
-                      <div key={ability.name} className="bg-red-900 bg-opacity-30 p-3 rounded-xl capitalize font-medium flex justify-between items-center">
-                        {ability.name}
-                        {ability.isHidden && 
-                          <span className="text-xs bg-red-600 rounded-full px-2 py-1 font-bold">Hidden</span>
-                        }
-                      </div>
+                      <AbilityItem 
+                        key={ability.name} 
+                        name={ability.name} 
+                        isHidden={ability.isHidden} 
+                        side="right" 
+                      />
                     ))}
                   </div>
                 </div>
               </div>
-            </div>
+            </Card>
             
             {/* Additional info comparison */}
-            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 shadow-2xl border border-gray-700">
+            <Card gradient="from-gray-800 to-gray-900" className="p-6">
               <h2 className="text-2xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-red-400">Breeding & Capture</h2>
               <div className="grid grid-cols-2 gap-6">
                 <div>
@@ -398,20 +459,19 @@ const ComparePokemons = () => {
                       <span className="text-sm font-bold">Egg Groups:</span>
                       <div className="flex flex-wrap gap-2 mt-2">
                         {leftPokemon.species.eggGroups.map(group => (
-                          <span key={group} className="bg-blue-700 text-xs font-bold rounded-full px-3 py-1 capitalize">{group}</span>
+                          <EggGroup key={group} name={group} side="left" />
                         ))}
                       </div>
                     </div>
                     <div className="bg-blue-900 bg-opacity-30 p-3 rounded-xl">
                       <span className="text-sm font-bold">Catch Rate:</span>
                       <div className="mt-2 flex items-center">
-                        <div className="w-full bg-gray-800 rounded-full h-3">
-                          <div 
-                            className="bg-blue-500 h-3 rounded-full transition-all duration-500" 
-                            style={{ width: `${(leftPokemon.species.captureRate / 255) * 100}%` }}
-                          ></div>
-                        </div>
-                        <span className="ml-2 font-mono font-bold">{leftPokemon.species.captureRate}/255</span>
+                        <StatBar 
+                          value={leftPokemon.species.captureRate} 
+                          maxValue={255} 
+                          color="bg-blue-500" 
+                        />
+                        <span className="ml-2 font-mono font-bold">/255</span>
                       </div>
                     </div>
                   </div>
@@ -423,26 +483,25 @@ const ComparePokemons = () => {
                       <span className="text-sm font-bold">Egg Groups:</span>
                       <div className="flex flex-wrap gap-2 mt-2">
                         {rightPokemon.species.eggGroups.map(group => (
-                          <span key={group} className="bg-red-700 text-xs font-bold rounded-full px-3 py-1 capitalize">{group}</span>
+                          <EggGroup key={group} name={group} side="right" />
                         ))}
                       </div>
                     </div>
                     <div className="bg-red-900 bg-opacity-30 p-3 rounded-xl">
                       <span className="text-sm font-bold">Catch Rate:</span>
                       <div className="mt-2 flex items-center">
-                        <div className="w-full bg-gray-800 rounded-full h-3">
-                          <div 
-                            className="bg-red-500 h-3 rounded-full transition-all duration-500" 
-                            style={{ width: `${(rightPokemon.species.captureRate / 255) * 100}%` }}
-                          ></div>
-                        </div>
-                        <span className="ml-2 font-mono font-bold">{rightPokemon.species.captureRate}/255</span>
+                        <StatBar 
+                          value={rightPokemon.species.captureRate} 
+                          maxValue={255} 
+                          color="bg-red-500" 
+                        />
+                        <span className="ml-2 font-mono font-bold">/255</span>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </Card>
           </div>
         )}
       </div>
