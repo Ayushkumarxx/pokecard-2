@@ -9,7 +9,7 @@ const FilterTypes = ({
   onClearAll,
   onSort,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const [currentSort, setCurrentSort] = useState({
     field: null,
     direction: "asc",
