@@ -4,14 +4,7 @@ import { useLikeContext } from "../context/LikeContext";
 import { FaHeart } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 
-/**
- * TypeBadge Component
- *
- * This component renders a badge for a Pokémon type, with an animated hover effect.
- *
- * Props:
- * - type (string): The type of the Pokémon to be displayed as a badge.
- */
+// 🎖️ A neat little badge for each Pokémon type
 const TypeBadge = ({ type }) => {
   const style = typeStyles[type] || {
     color: "#CCCCCC",
@@ -28,17 +21,7 @@ const TypeBadge = ({ type }) => {
   );
 };
 
-/**
- * StatBar Component
- *
- * This component displays a stat bar with an animation indicating a Pokémon's stat value.
- *
- * Props:
- * - label (string): The label for the stat (e.g., "HP", "ATK").
- * - value (number): The value of the stat.
- * - maxValue (number, optional): The maximum value for the stat (default is 200).
- * - color (string): The color of the stat bar (e.g., "#FF5959").
- */
+// 📊 A simple bar to represent stats like HP, ATK, etc.
 const StatBar = ({ label, value, maxValue = 200, color }) => {
   const percentage = Math.min(100, (value / maxValue) * 100);
 
@@ -64,15 +47,7 @@ const StatBar = ({ label, value, maxValue = 200, color }) => {
   );
 };
 
-/**
- * PokemonCard Component
- *
- * This component displays a Pokémon's details in a card layout, including its types, image, and stats.
- * It includes various animations for visual effects.
- *
- * Props:
- * - pokemon (object): The Pokémon object containing its name, id, types, stats, and image.
- */
+// 🧩 The main card displaying Pokémon details, image, stats & more
 const PokemonCard = ({ pokemon, onUnlike }) => {
   const { toggleLike, isLiked } = useLikeContext();
   const navigate = useNavigate();
@@ -80,9 +55,10 @@ const PokemonCard = ({ pokemon, onUnlike }) => {
   const handleHeartClick = () => {
     toggleLike(pokemon.id);
     if (isLiked && onUnlike) {
-      onUnlike(); // update UI only when it's being unliked
+      onUnlike(); // Let parent component know if we unliked it 🗑️
     }
   };
+
   const primaryType = pokemon.types[0];
   const style = typeStyles[primaryType] || {
     color: "#CCCCCC",
@@ -94,17 +70,14 @@ const PokemonCard = ({ pokemon, onUnlike }) => {
       className="rounded-2xl overflow-hidden shadow-md transform hover:-translate-y-2 transition-all duration-500 hover:shadow-2xl animate-fadeIn "
       style={{
         animation: "fadeIn 0.6s ease-out",
-        // boxShadow: `0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px ${style.color}40`,
         background: `radial-gradient(circle, ${style.color}30, ${style.color}10)`,
       }}
-
-
     >
-      {/* Gradient Header */}
+      {/* 🌈 Fancy top border with type gradient */}
       <div className="h-1.5" style={{ background: style.gradient }}></div>
 
       <div className="p-5">
-        {/* Pokémon Name and ID */}
+        {/* 🧾 Pokémon name and ID */}
         <div className="flex justify-between items-start mb-4">
           <div>
             <h2 className="text-xl font-bold text-white capitalize">
@@ -115,6 +88,7 @@ const PokemonCard = ({ pokemon, onUnlike }) => {
             </div>
           </div>
 
+          {/* 💖 Like button with heart icon */}
           <button onClick={handleHeartClick} className="cursor-pointer">
             <FaHeart
               size={20}
@@ -125,7 +99,7 @@ const PokemonCard = ({ pokemon, onUnlike }) => {
           </button>
         </div>
 
-        {/* Pokémon Image with Animation */}
+        {/* 📷 Pokémon image with hover animation */}
         <div
           className="rounded-full p-6 mb-4 flex justify-center items-center overflow-hidden bg-opacity-10 cursor-pointer"
           style={{
@@ -144,14 +118,14 @@ const PokemonCard = ({ pokemon, onUnlike }) => {
           />
         </div>
 
-        {/* Pokémon Types */}
+        {/* 🏷️ Display all Pokémon types */}
         <div className="mb-4">
           {pokemon.types.map((type) => (
             <TypeBadge key={type} type={type} />
           ))}
         </div>
 
-        {/* Pokémon Stats */}
+        {/* 💪 Display core stats: HP, ATK, DEF, SPD */}
         <div className="mt-5">
           <StatBar label="HP" value={pokemon.stats.hp} color="#FF5959" />
           <StatBar label="ATK" value={pokemon.stats.attack} color="#F5AC78" />

@@ -1,5 +1,8 @@
 import React from 'react';
 
+
+
+// type badge componet get color using Pokemon type 
 const TypeBadge = ({ type }) => {
     const typeColors = {
       normal: 'bg-gray-400',

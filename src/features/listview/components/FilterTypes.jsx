@@ -2,20 +2,6 @@ import React, { useState } from "react";
 import { FiFilter, FiChevronDown, FiX } from "react-icons/fi";
 import typeStyles from "../../../shared/utils/typeStyle";
 
-/**
- * FilterTypes Component
- *
- * This component renders a filter UI that allows users to filter by different types.
- * It displays a list of types and highlights the selected ones with a distinct style.
- * The component can be collapsed/expanded using the dropdown icon.
- *
- * Props:
- * - types (Array): A list of types to be displayed as filter options.
- * - selectedTypes (Array): A list of types that are currently selected.
- * - onTypeToggle (Function): A function to handle toggling the selection of a type.
- * - onClearAll (Function): A function to clear all selected filters.
- * - onSort (Function): A function to sort by field and direction.
- */
 const FilterTypes = ({
   types,
   selectedTypes,
@@ -23,7 +9,7 @@ const FilterTypes = ({
   onClearAll,
   onSort,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(true); // By default show the filter options
+  const [isExpanded, setIsExpanded] = useState(false);
   const [currentSort, setCurrentSort] = useState({
     field: null,
     direction: "asc",
@@ -33,7 +19,6 @@ const FilterTypes = ({
     setIsExpanded(!isExpanded);
   };
 
-  // Handle sorting
   const handleSort = (field) => {
     let direction = "asc";
     if (currentSort.field === field) {
@@ -46,7 +31,6 @@ const FilterTypes = ({
 
   return (
     <div className="mb-8">
-      {/* Filter Header with Toggle */}
       <div className="flex items-center justify-between mb-4 cursor-pointer">
         <div className="flex items-center gap-2 text-[16px] ">
           <FiFilter className="text-[#FFCB05]" />
@@ -69,12 +53,10 @@ const FilterTypes = ({
         />
       </div>
 
-      {/* Filter Button Group with Animation */}
       {isExpanded && (
         <>
           <div className="flex flex-wrap gap-2 animate-fadeIn">
             {types.map((type) => {
-              // Determine the style based on the type
               const typeStyle = typeStyles[type] || {
                 color: "#CCCCCC",
                 gradient: "linear-gradient(135deg, #CCCCCC, #999999)",
@@ -83,25 +65,24 @@ const FilterTypes = ({
               return (
                 <button
                   key={type}
-                  onClick={() => onTypeToggle(type)} // Toggle the type on button click
+                  onClick={() => onTypeToggle(type)}
                   className={`px-3.5 py-2 rounded-full capitalize text-white transition-all duration-300 text-[14px] ${
                     selectedTypes.includes(type)
-                      ? "shadow-lg transform scale-105" // Apply style if type is selected
-                      : "opacity-70 hover:opacity-100" // Default style for unselected types
+                      ? "shadow-lg transform scale-105"
+                      : "opacity-70 hover:opacity-100"
                   }`}
                   style={{
                     background: selectedTypes.includes(type)
                       ? typeStyle.gradient
-                      : "rgba(255,255,255,0.1)", // Background gradient or transparent for selected/unselected
+                      : "rgba(255,255,255,0.1)",
                   }}
                 >
-                  {type} {/* Display the type name */}
+                  {type}
                 </button>
               );
             })}
           </div>
 
-          {/* Sort Options */}
           <div className="flex flex-wrap gap-2 mt-4 mb-4 font-semibold animate-fadeIn">
             <button
               onClick={() => handleSort("id")}

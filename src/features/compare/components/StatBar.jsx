@@ -1,5 +1,7 @@
 import React from "react";
 
+
+// the small stat bar component
 const StatBar = ({ value, maxValue = 255, color }) => {
   const percentage = Math.min(100, (value / maxValue) * 100);
 

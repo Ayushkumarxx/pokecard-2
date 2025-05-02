@@ -11,7 +11,7 @@ const PaginationControls = ({
 }) => {
   if (!show) return null;
 
-  // Dynamic page range
+  // Function to calculate visible page numbers
   const getVisiblePages = () => {
     const pages = [];
     const maxButtons = 5;
@@ -33,7 +33,7 @@ const PaginationControls = ({
   return (
     <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-between items-center mt-8 bg-[#1A1A1A] p-4 max-md:px-2 rounded-lg shadow-sm">
       
-      {/* Items per page */}
+      {/* Items per page selector */}
       <div className="flex items-center text-white font-bold text-sm">
         <label htmlFor="items-per-page" className="mr-2">
           Items per page:
@@ -60,6 +60,7 @@ const PaginationControls = ({
           <FaArrowLeft /> Prev
         </button>
 
+        {/* Page number buttons */}
         {getVisiblePages().map((page) => (
           <button
             key={page}
@@ -83,7 +84,7 @@ const PaginationControls = ({
         </button>
       </div>
 
-      {/* Page info */}
+      {/* Page info display */}
       <div className="text-gray-300 font-bold text-center sm:text-left text-sm">
         Page {pagination.currentPage} of{" "}
         {selectedTypes.length > 0
@@ -95,3 +96,4 @@ const PaginationControls = ({
 };
 
 export default PaginationControls;
+

@@ -3,6 +3,7 @@ import React from "react";
 // Reusable PokemonTabs Component
 const PokemonTabs = ({ activeTab, setActiveTab }) => (
   <div className="w-full overflow-x-auto mb-8 px-2">
+    {/* Tab navigation */}
     <div className="flex space-x-2 py-2 px-2 bg-[#1E1E1E] rounded-full min-w-max max-md:justify-between">
       {["stats", "evolution", "abilities", "moves"].map((tab) => (
         <button
@@ -22,3 +23,4 @@ const PokemonTabs = ({ activeTab, setActiveTab }) => (
 );
 
 export default PokemonTabs;
+

@@ -13,18 +13,18 @@ import PaginationControls from "./components/PaginationControls";
 
 const ListPage = () => {
   // State for filters and UI state
-  const [selectedTypes, setSelectedTypes] = useState([]);
-  const [allTypes, setAllTypes] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredPokemon, setFilteredPokemon] = useState(null); // Initialize as null instead of empty array
+  const [selectedTypes, setSelectedTypes] = useState([]); // Selected types for filtering
+  const [allTypes, setAllTypes] = useState([]); // List of all available types
+  const [searchTerm, setSearchTerm] = useState(""); // Search term for Pokémon search
+  const [filteredPokemon, setFilteredPokemon] = useState(null); // Filtered Pokémon list
 
   // Add state for tracking sort configuration
   const [sortConfig, setSortConfig] = useState({
-    field: "id",
-    direction: "asc",
+    field: "id", // Default sorting by id
+    direction: "asc", // Default sorting direction
   });
-  const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [sectionLoading, setSectionLoading] = useState(false);
+  const [itemsPerPage, setItemsPerPage] = useState(10); // Number of items per page
+  const [sectionLoading, setSectionLoading] = useState(false); // Section loading state
 
   // Use our custom hooks
   const {
@@ -52,12 +52,13 @@ const ListPage = () => {
 
   const totalPages =
     selectedTypes.length > 0
-      ? pagination.filteredTotalPages
-      : pagination.totalPages;
+      ? pagination.filteredTotalPages // Use filtered total pages when types are selected
+      : pagination.totalPages; // Use total pages otherwise
+
   // Extract all unique types when pokemon data is loaded
   useEffect(() => {
     if (pokemonTypes) {
-      setAllTypes(pokemonTypes);
+      setAllTypes(pokemonTypes); // Set available types once they are fetched
     }
   }, [pokemonTypes]);
 
@@ -87,7 +88,7 @@ const ListPage = () => {
     }
 
     setSortConfig({ field, direction });
-    setFilteredPokemon(sortedPokemon);
+    setFilteredPokemon(sortedPokemon); // Set sorted Pokémon list
   };
 
   // Modified useEffect to apply current sort when filters change
@@ -114,7 +115,7 @@ const ListPage = () => {
           );
         } else {
           setSectionLoading(true);
-          results = await fetchPokemonList(selectedTypes);
+          results = await fetchPokemonList(selectedTypes); // Fetch filtered list by types
         }
       }
 
@@ -126,7 +127,7 @@ const ListPage = () => {
           (selectedTypes.length === 0 ||
             fetched.types.some((type) => selectedTypes.includes(type)))
         ) {
-          results = [fetched];
+          results = [fetched]; // Set fetched Pokémon if valid
         }
       }
 
@@ -150,7 +151,7 @@ const ListPage = () => {
         }
       }
 
-      setFilteredPokemon(results);
+      setFilteredPokemon(results); // Set final filtered Pokémon list
       setSectionLoading(false);
     };
 
@@ -168,19 +169,19 @@ const ListPage = () => {
     setSelectedTypes((prev) => {
       const newTypes = new Set(prev);
       newTypes.has(type) ? newTypes.delete(type) : newTypes.add(type);
-      return [...newTypes];
+      return [...newTypes]; // Toggle type in the selected types list
     });
   };
 
   const handleClearAll = () => {
-    setSelectedTypes([]);
+    setSelectedTypes([]); // Clear all selected types
   };
 
   // Function to handle items per page change
   const handleItemsPerPageChange = (event) => {
     const newValue = parseInt(event.target.value, 10);
     setSectionLoading(true);
-    setItemsPerPage(newValue);
+    setItemsPerPage(newValue); // Update items per page
     changeItemsPerPage(newValue);
   };
 
@@ -188,17 +189,17 @@ const ListPage = () => {
   const handlePageChange = (action, pageNum = null) => {
     setSectionLoading(true);
     if (action === "next") {
-      nextPage();
+      nextPage(); // Go to next page
     } else if (action === "prev") {
-      prevPage();
+      prevPage(); // Go to previous page
     } else if (action === "goto" && pageNum !== null) {
-      goToPage(pageNum);
+      goToPage(pageNum); // Go to specific page
     }
   };
 
   // Initial loading state: display full loading animation only on first load
   if ((loading && !sectionLoading) || filteredPokemon === null) {
-    return <ListPageLoder />;
+    return <ListPageLoder />; // Show loader until data is ready
   }
 
   // Render the main content after loading is complete

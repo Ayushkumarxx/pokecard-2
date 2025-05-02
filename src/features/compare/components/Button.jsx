@@ -1,5 +1,7 @@
 import React from "react";
 
+
+// button component
 const Button = ({ onClick, disabled, className, children }) => (
   <button
     onClick={onClick}

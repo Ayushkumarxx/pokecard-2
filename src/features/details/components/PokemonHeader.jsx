@@ -1,17 +1,18 @@
-import React from "react";
-
 // Reusable PokemonHeader Component
+// This component displays the Pokémon's details, types, stats, and flavor text
 const PokemonHeader = ({ pokemon, getTypeColor }) => (
   <div className="bg-[#1E1E1E] rounded-2xl shadow-sm overflow-hidden mb-10 backdrop-blur-xl">
     <div
       className="relative px-4 sm:px-6 py-8 sm:py-10"
       style={{
+        // Gradient background with the primary type color
         background: `radial-gradient(circle at 50% 0%, ${getTypeColor(
           pokemon.types[0]
         )}33 0%, transparent 75%), 
                     linear-gradient(to bottom, ${getTypeColor(
                       pokemon.types[0]
                     )}22, transparent)`,
+        // Inner shadow for a subtle 3D effect
         boxShadow: `inset 0 -20px 30px -10px #1E1E1E`,
       }}
     >
@@ -28,6 +29,7 @@ const PokemonHeader = ({ pokemon, getTypeColor }) => (
             <div
               className="absolute inset-0 bg-white opacity-5 blur-2xl rounded-full scale-90"
               style={{
+                // Gradient background with the primary type color
                 background: `radial-gradient(circle, ${getTypeColor(
                   pokemon.types[0]
                 )}66, transparent 70%)`,
@@ -72,6 +74,7 @@ const PokemonHeader = ({ pokemon, getTypeColor }) => (
                 key={type}
                 className="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold capitalize"
                 style={{
+                  // Background color with the type color
                   backgroundColor: `${getTypeColor(type)}44`,
                   color: getTypeColor(type),
                   border: `1px solid ${getTypeColor(type)}88`,
@@ -119,3 +122,4 @@ const PokemonHeader = ({ pokemon, getTypeColor }) => (
 );
 
 export default PokemonHeader;
+

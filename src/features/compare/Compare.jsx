@@ -5,7 +5,7 @@ import BackButton from "./components/BackButton";
 import StatBar from "./components/StatBar";
 import TypeBadge from "./components/TypeBadge";
 
-// Reusable Card Component
+// Reusable Card Component with gradient background support
 const Card = ({ children, gradient, className = "" }) => (
   <div
     className={`bg-gradient-to-br rounded-2xl p-4 shadow-lg border border-gray-700 ${className}`}
@@ -16,11 +16,11 @@ const Card = ({ children, gradient, className = "" }) => (
 );
 
 const ComparePokemons = () => {
-  // State for search inputs
+  // State for search inputs - tracks what users type in search boxes
   const [leftSearchInput, setLeftSearchInput] = useState("");
   const [rightSearchInput, setRightSearchInput] = useState("");
 
-  // Using our provided hook for each Pokémon
+  // Custom hooks to fetch and store Pokémon data for left side
   const {
     pokemon: leftPokemon,
     loading: leftLoading,
@@ -28,6 +28,7 @@ const ComparePokemons = () => {
     fetchPokemon: fetchLeftPokemon
   } = usePokemonDetail();
 
+  // Custom hooks to fetch and store Pokémon data for right side
   const {
     pokemon: rightPokemon,
     loading: rightLoading,
@@ -35,7 +36,7 @@ const ComparePokemons = () => {
     fetchPokemon: fetchRightPokemon
   } = usePokemonDetail();
 
-  // Function to handle Pokémon searches
+  // Handle form submission when searching for a Pokémon
   const handleSearch = useCallback((e, input, fetchFn) => {
     e.preventDefault();
     if (input.trim()) {
@@ -43,28 +44,28 @@ const ComparePokemons = () => {
     }
   }, []);
 
-  // Function to get random Pokémon (ID between 1 and 898)
+  // Generate a random Pokémon ID between 1 and 898
   const getRandomPokemon = useCallback(() => Math.floor(Math.random() * 898) + 1, []);
 
-  // Function to fetch random Pokémon
+  // Handle random Pokémon button click - updates input field and fetches data
   const handleRandom = useCallback((setInput, fetchFn) => {
     const randomId = getRandomPokemon();
     setInput(randomId.toString());
     fetchFn(randomId);
   }, [getRandomPokemon]);
 
-  // Helper function to determine stat color based on comparison
+  // Determine stat bar color based on comparison between two Pokémon
   const getStatColor = useCallback((stat1, stat2) => {
     if (!stat1 || !stat2) return "bg-gray-600";
-    if (stat1 > stat2) return "bg-green-500";
-    if (stat1 < stat2) return "bg-red-500";
-    return "bg-yellow-400";
+    if (stat1 > stat2) return "bg-green-500"; // Better stat
+    if (stat1 < stat2) return "bg-red-500";   // Worse stat
+    return "bg-yellow-400";                   // Equal stats
   }, []);
 
-  // Navigation function
+  // Simple navigation function to go back to previous page
   const handleBack = useCallback(() => window.history.back(), []);
 
-  // Reusable SearchBox component
+  // Reusable SearchBox component with search form and random button
   const SearchBox = ({ searchInput, setSearchInput, side }) => (
     <Card
       gradient={side === "left" ? "from-blue-900 to-blue-700" : "from-red-900 to-red-700"}
@@ -98,12 +99,14 @@ const ComparePokemons = () => {
     </Card>
   );
 
-  // PokemonCard component
+  // PokemonCard component - displays Pokémon image, name, ID and types
   const PokemonCard = ({ pokemon, loading, side }) => {
+    // Set gradient background based on which side (blue for left, red for right)
     const cardGradient = side === "left"
       ? `radial-gradient(circle, #1e3a8a30, #1e3a8a10)`
       : `radial-gradient(circle, #b91c1c30, #b91c1c10)`;
 
+    // Loading skeleton UI state
     if (loading) {
       return (
         <Card gradient={cardGradient} className="animate-pulse min-h-[280px]">
@@ -114,6 +117,7 @@ const ComparePokemons = () => {
       );
     }
 
+    // Empty state when no Pokémon is selected
     if (!pokemon) {
       return (
         <Card gradient={cardGradient} className="flex flex-col items-center justify-center min-h-[280px] border-2 border-gray-700">
@@ -125,9 +129,11 @@ const ComparePokemons = () => {
       );
     }
 
+    // Pokémon card with data display
     return (
       <Card gradient={cardGradient}>
         <div className="relative flex justify-center">
+          {/* Glowing background effect for the Pokémon image */}
           <div className={`absolute inset-0 ${side === "left" ? "bg-blue-500" : "bg-red-500"} rounded-full filter blur-xl opacity-30 transform scale-75`}></div>
           <img
             src={pokemon.image}
@@ -143,6 +149,7 @@ const ComparePokemons = () => {
           </p>
         </div>
 
+        {/* Type badges display */}
         <div className="flex justify-center gap-1">
           {pokemon.types.map((type) => (
             <TypeBadge key={type} type={type} />
@@ -152,10 +159,11 @@ const ComparePokemons = () => {
     );
   };
 
-  // Simplified stat comparison renderer
+  // Function to render the stats comparison section
   const renderStats = () => {
     if (!leftPokemon || !rightPokemon) return null;
-    
+
+    // Define stats to compare between Pokémon
     const stats = [
       { name: "HP", left: leftPokemon.stats.hp, right: rightPokemon.stats.hp },
       { name: "ATK", left: leftPokemon.stats.attack, right: rightPokemon.stats.attack },
@@ -164,16 +172,17 @@ const ComparePokemons = () => {
       { name: "SP.DEF", left: leftPokemon.stats.specialDefense, right: rightPokemon.stats.specialDefense },
       { name: "SPD", left: leftPokemon.stats.speed, right: rightPokemon.stats.speed }
     ];
-    
-    // Calculate totals
+
+    // Calculate total stats for each Pokémon
     const leftTotal = stats.reduce((sum, stat) => sum + stat.left, 0);
     const rightTotal = stats.reduce((sum, stat) => sum + stat.right, 0);
-    
+
     return (
       <>
+        {/* Individual stat comparison rows */}
         {stats.map((stat) => (
           <div key={stat.name} className="grid grid-cols-11 gap-1 mb-2 items-center">
-            <div className="col-span-5  max-md:col-span-3 flex items-center justify-end">
+            <div className="col-span-5 max-md:col-span-3 flex items-center justify-end">
               <span className="text-xs sm:text-sm font-bold text-white mr-2">{stat.left}</span>
               <StatBar 
                 value={stat.left} 
@@ -188,14 +197,12 @@ const ComparePokemons = () => {
                 maxValue={255} 
                 color={getStatColor(stat.right, stat.left)} 
               />
-                <span className="text-xs sm:text-sm font-bold text-white ml-2">{stat.right}</span>
-              
+              <span className="text-xs sm:text-sm font-bold text-white ml-2">{stat.right}</span>
             </div>
-            
           </div>
         ))}
         
-        {/* Total stats */}
+        {/* Total stats comparison with divider */}
         <div className="mt-3 pt-3 border-t border-gray-700">
           <div className="grid grid-cols-11 gap-1 items-center">
             <div className="col-span-5 max-md:col-span-3 flex items-center justify-end">
@@ -213,7 +220,7 @@ const ComparePokemons = () => {
                 maxValue={720} 
                 color={getStatColor(rightTotal, leftTotal)} 
               />
-               <span className="text-xs sm:text-sm font-bold text-white ml-2">{rightTotal}</span>
+              <span className="text-xs sm:text-sm font-bold text-white ml-2">{rightTotal}</span>
             </div>
           </div>
         </div>
@@ -226,11 +233,12 @@ const ComparePokemons = () => {
       <div className="max-w-5xl mx-auto px-3 py-6">
         {/* Back Button */}
         <BackButton onClick={handleBack} />
-        
+
         {/* Header */}
         <h1 className="text-xl sm:text-2xl font-bold text-white mb-2">Your Favorite Pokémon</h1>
         <div className="h-1 w-24 mb-6 rounded-full bg-white"></div>
 
+        {/* Main layout with 7-column grid on larger screens */}
         <div className="grid grid-cols-1 sm:grid-cols-7 gap-4 mb-6">
           {/* Left column */}
           <div className="sm:col-span-3">
@@ -246,13 +254,12 @@ const ComparePokemons = () => {
             />
           </div>
 
-          {/* VS section */}
+          {/* VS section - middle column */}
           <div className="sm:col-span-1 flex items-center justify-center my-2 sm:my-0">
             <div className="relative">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-indigo-800 flex items-center justify-center text-lg sm:text-xl font-black  border-2 border-gray-800">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-indigo-800 flex items-center justify-center text-lg sm:text-xl font-black border-2 border-gray-800">
                 VS
               </div>
-       
             </div>
           </div>
 
@@ -271,13 +278,14 @@ const ComparePokemons = () => {
           </div>
         </div>
 
-        {/* Stats comparison section */}
+        {/* Stats comparison section - only shown when both Pokémon are selected */}
         {leftPokemon && rightPokemon && (
           <Card gradient="from-gray-900 to-gray-950" className="mt-6 p-4">
             <h2 className="text-xl sm:text-2xl font-bold mb-4 text-center text-white">
               Stats Comparison
             </h2>
 
+            {/* Pokémon names header for stats section */}
             <div className="grid grid-cols-11 gap-1 mb-4 items-center">
               <div className="col-span-5 text-right pr-1">
                 <h3 className="font-bold text-sm sm:text-base capitalize text-blue-400">
@@ -292,6 +300,7 @@ const ComparePokemons = () => {
               </div>
             </div>
 
+            {/* Render all stat comparison bars */}
             {renderStats()}
           </Card>
         )}

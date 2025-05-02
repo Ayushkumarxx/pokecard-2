@@ -1,5 +1,6 @@
 const StatsTab = ({ pokemon }) => (
   <div className="px-2 sm:px-6">
+    {/* Base Stats Title */}
     <h2 className="text-2xl font-bold mb-10 text-center text-white">Base Stats</h2>
 
     <div className="max-w-3xl mx-auto space-y-8">
@@ -18,10 +19,12 @@ const StatsTab = ({ pokemon }) => (
             key={statName}
             className="flex items-center justify-between gap-6 md:gap-10 flex-wrap sm:flex-nowrap"
           >
-            <div className="flex justify-between  gap-2 sm:gap-4 w-full sm:w-[20%] text-[16px]">
+            {/* Stat Label and Value */}
+            <div className="flex justify-between gap-2 sm:gap-4 w-full sm:w-[20%] text-[16px]">
               <span className="font-semibold text-gray-300">{displayName}</span>
               <span className="font-semibold text-white">{statValue}</span>
             </div>
+            {/* Stat Bar */}
             <div className="w-full sm:w-[80%] h-3 bg-[#2A2A2A] rounded-full overflow-hidden">
               <div
                 className="h-full bg-gray-100 rounded-full"
@@ -36,6 +39,7 @@ const StatsTab = ({ pokemon }) => (
       })}
     </div>
 
+    {/* Additional Information */}
     <div className="mt-14 pt-10 border-t border-[#333333]">
       <h3 className="text-xl font-semibold mb-8 text-center text-white">
         Additional Information
@@ -63,6 +67,7 @@ const StatsTab = ({ pokemon }) => (
             key={info.label}
             className="bg-[#2A2A2A] hover:bg-[#333333] transition-colors duration-200 rounded-xl p-5 text-center"
           >
+            {/* Info Label and Value */}
             <p className="text-xs text-gray-400 uppercase tracking-wide mb-2">{info.label}</p>
             <p className="font-semibold text-sm text-white">{info.value}</p>
           </div>
@@ -73,3 +78,4 @@ const StatsTab = ({ pokemon }) => (
 );
 
 export default StatsTab;
+

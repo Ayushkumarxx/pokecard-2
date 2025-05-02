@@ -1,5 +1,9 @@
 import { FiSearch, FiX, FiFrown } from 'react-icons/fi';
 
+/**
+ * MovesTab component
+ * Display a list of moves with search and load more functionality
+ */
 const MovesTab = ({
   filteredMoves,
   searchQuery,
@@ -10,6 +14,7 @@ const MovesTab = ({
   <div>
     <h2 className="text-2xl font-bold mb-10 text-center">Moves</h2>
 
+    {/* Search input with clear button */}
     <div className="relative max-w-2xl mx-auto mb-8">
       <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
         <FiSearch className="w-5 h-5 text-gray-400" />
@@ -31,6 +36,7 @@ const MovesTab = ({
       )}
     </div>
 
+    {/* Display no results message if filteredMoves is empty */}
     {filteredMoves.length === 0 ? (
       <div className="flex flex-col items-center justify-center py-16 bg-[#2A2A2A] rounded-xl">
         <FiFrown className="w-16 h-16 text-gray-500 mb-4" />
@@ -40,6 +46,7 @@ const MovesTab = ({
       </div>
     ) : (
       <>
+        {/* Display list of moves */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
           {filteredMoves.slice(0, visibleMoves).map((move) => (
             <div
@@ -53,6 +60,7 @@ const MovesTab = ({
           ))}
         </div>
 
+        {/* Load more button if there are more moves to display */}
         {visibleMoves < filteredMoves.length && (
           <div className="mt-8 text-center">
             <button
@@ -69,3 +77,4 @@ const MovesTab = ({
 );
 
 export default MovesTab;
+

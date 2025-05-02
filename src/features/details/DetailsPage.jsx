@@ -11,53 +11,54 @@ import AbilitiesTab from "./components/AbilitiesTab";
 import MovesTab from "./components/MovesTab";
 import SectionLoader from "../../shared/components/SectionLoader";
 
-
-// Reusable MovesTab Component
-
+// Pokemon Details Page Component
 const PokemonDetailsPage = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const { pokemon, loading, error, fetchPokemon } = usePokemonDetail();
-  const [evolutionChain, setEvolutionChain] = useState([]);
-  const [evolutionLoading, setEvolutionLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState("stats");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [visibleMoves, setVisibleMoves] = useState(24);
+  const { id } = useParams(); // Get the Pokemon ID from URL params
+  const navigate = useNavigate(); // For navigation in the app
+  const { pokemon, loading, error, fetchPokemon } = usePokemonDetail(); // Fetch Pokemon details
+  const [evolutionChain, setEvolutionChain] = useState([]); // Store evolution chain
+  const [evolutionLoading, setEvolutionLoading] = useState(false); // State for loading evolution chain
+  const [activeTab, setActiveTab] = useState("stats"); // Track the active tab (stats, abilities, etc.)
+  const [searchQuery, setSearchQuery] = useState(""); // Handle search query for moves
+  const [visibleMoves, setVisibleMoves] = useState(24); // Track the number of moves visible
 
+  // Fetch the Pokemon details when the component mounts or ID changes
   useEffect(() => {
     if (id) {
-      fetchPokemon(id);
+      fetchPokemon(id); // Fetch details for the selected Pokemon
     }
   }, [id, fetchPokemon]);
 
+  // Fetch the evolution chain for the Pokemon
   useEffect(() => {
     const fetchEvolutionChain = async () => {
       if (pokemon?.species) {
         try {
-          setEvolutionLoading(true);
+          setEvolutionLoading(true); // Set loading state
           const speciesResponse = await axios.get(
-            `https://pokeapi.co/api/v2/pokemon-species/${pokemon.id}`
+            `https://pokeapi.co/api/v2/pokemon-species/${pokemon.id}` // Fetch species data
           );
           const evolutionChainUrl = speciesResponse.data.evolution_chain.url;
 
-          const evolutionResponse = await axios.get(evolutionChainUrl);
+          const evolutionResponse = await axios.get(evolutionChainUrl); // Fetch evolution chain data
           const chain = evolutionResponse.data.chain;
 
           const evolutions = [];
-          processEvolutionChain(chain, evolutions);
+          processEvolutionChain(chain, evolutions); // Process the evolution chain
 
-          setEvolutionChain(evolutions);
+          setEvolutionChain(evolutions); // Set the processed evolution chain
         } catch (error) {
-          console.error("Error fetching evolution chain:", error);
+          console.error("Error fetching evolution chain:", error); // Handle error in fetching evolution chain
         } finally {
-          setEvolutionLoading(false);
+          setEvolutionLoading(false); // Set loading state to false after fetching
         }
       }
     };
 
     fetchEvolutionChain();
-  }, [pokemon]);
+  }, [pokemon]); // Rerun if pokemon data changes
 
+  // Helper function to process evolution chain recursively
   const processEvolutionChain = (chain, evolutions) => {
     const pokemonId = chain.species.url.split("/").filter(Boolean).pop();
     evolutions.push({
@@ -70,11 +71,12 @@ const PokemonDetailsPage = () => {
 
     if (chain.evolves_to.length > 0) {
       chain.evolves_to.forEach((evolution) => {
-        processEvolutionChain(evolution, evolutions);
+        processEvolutionChain(evolution, evolutions); // Recursive call for next evolution stage
       });
     }
   };
 
+  // Filter the moves based on the search query
   const filteredMoves = useMemo(() => {
     return (
       pokemon?.moves.filter((move) =>
@@ -83,10 +85,12 @@ const PokemonDetailsPage = () => {
     );
   }, [pokemon?.moves, searchQuery]);
 
+  // Load more moves on button click
   const loadMoreMoves = useCallback(() => {
-    setVisibleMoves((prev) => Math.min(prev + 24, filteredMoves.length));
+    setVisibleMoves((prev) => Math.min(prev + 24, filteredMoves.length)); // Increase visible moves
   }, [filteredMoves.length]);
 
+  // Helper function to get color associated with a Pokemon type
   const getTypeColor = useCallback((type) => {
     const typeColors = {
       normal: "#A8A878",
@@ -109,15 +113,15 @@ const PokemonDetailsPage = () => {
       fairy: "#EE99AC",
     };
 
-    return typeColors[type] || "#A8A878";
+    return typeColors[type] || "#A8A878"; // Return color or default color
   }, []);
 
-
-
+  // Show loading spinner if data is still loading
   if (loading) {
     return <SectionLoader minHeight="min-h-screen" message="Loading Pokémon Details..."/>;
   }
 
+  // Show error message if there was an issue fetching data
   if (error) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-[#121212]">
@@ -135,6 +139,7 @@ const PokemonDetailsPage = () => {
     );
   }
 
+  // Show message if no Pokemon is selected
   if (!pokemon) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-[#121212]">
@@ -151,6 +156,7 @@ const PokemonDetailsPage = () => {
     );
   }
 
+  // Main render of the Pokemon Details page
   return (
     <div className="min-h-screen bg-[#121212] py-8 px-4 text-gray-100 font-sans">
       <div className="max-w-6xl mx-auto">
@@ -162,10 +168,13 @@ const PokemonDetailsPage = () => {
           Back to Home
         </Link>
 
+        {/* Pokemon header */}
         <PokemonHeader pokemon={pokemon} getTypeColor={getTypeColor} />
 
+        {/* Pokemon tabs */}
         <PokemonTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
+        {/* Render content based on active tab */}
         <div className="bg-[#1E1E1E] rounded-2xl shadow-2xl p-8 max-md:p-2 max-md:py-6 mb-8">
           {activeTab === "stats" && (
             <StatsTab pokemon={pokemon}  />

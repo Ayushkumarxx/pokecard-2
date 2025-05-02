@@ -1,7 +1,9 @@
+import { Component } from "lucide-react";
 import React from "react";
-
 import { FaArrowLeft } from "react-icons/fa";
 
+
+// Back button Component
 const BackButton = ({ onClick }) => (
   <button
     onClick={onClick} // Navigate back to the homepage using useNavigate

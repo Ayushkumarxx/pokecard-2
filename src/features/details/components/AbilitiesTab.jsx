@@ -1,20 +1,23 @@
 const AbilitiesTab = ({ pokemon }) => (
   <div>
+    {/* Title */}
     <h2 className="text-2xl font-bold mb-10 text-center">Abilities</h2>
 
+    {/* Abilities List */}
     <div className="max-w-full mx-auto grid gap-6">
       {pokemon.abilities.map((ability) => (
         <div
           key={ability.name}
           className={`p-6 rounded-xl transition-all duration-200 
-              ${
-                ability.isHidden
-                  ? "bg-gradient-to-r from-indigo-900/50 to-purple-900/50 border border-indigo-500/30"
-                  : "bg-[#2A2A2A] hover:bg-[#333333]"
-              }`}
+            ${
+              ability.isHidden
+                ? "bg-gradient-to-r from-indigo-900/50 to-purple-900/50 border border-indigo-500/30"
+                : "bg-[#2A2A2A] hover:bg-[#333333]"
+            }`}
         >
           <div className="flex items-center">
             <div className="flex-1">
+              {/* Ability Name and Hidden Indicator */}
               <div className="flex items-center mb-3">
                 <h3 className="font-semibold text-xl capitalize mr-3">
                   {ability.name.replace(/-/g, " ")}
@@ -25,6 +28,7 @@ const AbilitiesTab = ({ pokemon }) => (
                   </span>
                 )}
               </div>
+              {/* Ability Description */}
               <p className="text-gray-400 leading-relaxed font-semibold text-sm">
                 {ability.isHidden
                   ? `This is a special hidden ability that rare ${pokemon.name} may possess. Hidden abilities often provide unique strategic advantages in battle.`
