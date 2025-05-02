@@ -27,7 +27,7 @@ const Navbar = ({ onSearch }) => {
           onClick={() => navigate("/favorites")}
         >
           <FaHeart className="text-gray-300 text-[20px] md:text-[20px] " />{" "}
-          <p className="text-gray-300 text-[14px] font-bold">Favorites</p>
+          <p className="text-gray-300 text-[14px] font-bold">{window.innerWidth > 768 ? "Favorites" : "Fav"}</p>
         </button>
       </div>
     </nav>
