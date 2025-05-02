@@ -55,7 +55,7 @@ const PaginationControls = ({
         <button
           onClick={() => handlePageChange("prev")}
           disabled={pagination.currentPage === 1}
-          className="px-3 py-1 bg-[#3B4CCA] text-white rounded-md disabled:opacity-50 hover:bg-[#2A3CAA] transition-colors shadow-md flex items-center font-bold gap-2"
+          className="px-3 py-1 bg-[#3B4CCA] text-white rounded-md disabled:opacity-50 hover:bg-[#2A3CAA] transition-colors shadow-md flex items-center font-bold gap-2 max-md:text-[12px]"
         >
           <FaArrowLeft /> Prev
         </button>
@@ -64,7 +64,7 @@ const PaginationControls = ({
           <button
             key={page}
             onClick={() => handlePageChange("goto", page)}
-            className={`w-9 h-9 flex items-center justify-center rounded-md font-semibold shadow-md transition-colors ${
+            className={`w-9 h-9 max-md:text-[12px] flex items-center justify-center rounded-md font-semibold shadow-md transition-colors ${
               pagination.currentPage === page
                 ? "bg-[#FFCB05] text-black font-bold"
                 : "bg-[#333] text-white hover:bg-[#444]"
@@ -77,7 +77,7 @@ const PaginationControls = ({
         <button
           onClick={() => handlePageChange("next")}
           disabled={pagination.currentPage === totalPages}
-          className="px-3 py-1 bg-[#3B4CCA] text-white rounded-md disabled:opacity-50 hover:bg-[#2A3CAA] transition-colors shadow-md flex items-center font-bold gap-2"
+          className="px-3 py-1 bg-[#3B4CCA] text-white rounded-md disabled:opacity-50 hover:bg-[#2A3CAA] transition-colors shadow-md flex items-center font-bold gap-2 max-md:text-[12px]"
         >
           Next <FaArrowRight />
         </button>
