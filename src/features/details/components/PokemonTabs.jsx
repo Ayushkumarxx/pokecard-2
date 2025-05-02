@@ -4,7 +4,7 @@ import React from "react";
 const PokemonTabs = ({ activeTab, setActiveTab }) => (
   <div className="w-full overflow-x-auto mb-8 px-2">
     {/* Tab navigation */}
-    <div className="flex space-x-2 py-2 px-2 bg-[#1E1E1E] rounded-full min-w-max max-md:justify-between">
+    <div className="flex space-x-2 py-2 px-2 bg-[#1E1E1E] rounded-full max-w-max">
       {["stats", "evolution", "abilities", "moves"].map((tab) => (
         <button
           key={tab}

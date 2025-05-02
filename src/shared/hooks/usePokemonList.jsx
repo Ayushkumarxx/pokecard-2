@@ -48,7 +48,6 @@ const usePokemonList = (itemsPerPage = 20, initialPage = 1) => {
           }
 
           // Process batches sequentially
-
           for (const batch of batches) {
             const batchData = await Promise.all(
               batch.map(async (pokemon) => {
