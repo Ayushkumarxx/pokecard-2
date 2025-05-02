@@ -93,6 +93,7 @@ const ListPage = () => {
 
   // Modified useEffect to apply current sort when filters change
   useEffect(() => {
+    let isCurrent = true; // flag to cancel outdated requests
     const filterAndFetch = async () => {
       // Only proceed if we have Pokémon data
       if (!pokemon || pokemon.length === 0) return;
@@ -151,11 +152,18 @@ const ListPage = () => {
         }
       }
 
-      setFilteredPokemon(results); // Set final filtered Pokémon list
-      setSectionLoading(false);
+      if (isCurrent) {
+        setFilteredPokemon(results);
+        setSectionLoading(false);
+      }
     };
 
     filterAndFetch();
+
+    return () => {
+      isCurrent = false; // cancel this fetch if a new one starts
+    };
+
     // Add sortConfig to dependencies if you want sorting to trigger re-filtering
   }, [pokemon, searchTerm, selectedTypes, fetchSpecificPokemon]);
 
