@@ -84,7 +84,7 @@ const PaginationControls = ({
       </div>
 
       {/* Page info */}
-      <div className="text-gray-300 font-bold text-center sm:text-left tc">
+      <div className="text-gray-300 font-bold text-center sm:text-left text-sm">
         Page {pagination.currentPage} of{" "}
         {selectedTypes.length > 0
           ? pagination.filteredTotalPages
