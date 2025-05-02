@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, memo } from "react";
 import usePokemonDetail from "../../shared/hooks/usePokemonDetail";
 import Button from "./components/Button";
 import BackButton from "./components/BackButton";
@@ -15,6 +15,109 @@ const Card = ({ children, gradient, className = "" }) => (
   </div>
 );
 
+// Memoized SearchBox component to prevent re-rendering on parent state changes
+const SearchBox = memo(({ 
+  searchInput, 
+  setSearchInput, 
+  side, 
+  loading, 
+  error, 
+  onSearch, 
+  onRandom 
+}) => (
+  <Card
+    gradient={side === "left" ? "from-blue-900 to-blue-700" : "from-red-900 to-red-700"}
+    className="mb-4"
+  >
+    <form onSubmit={(e) => onSearch(e, searchInput)} className="flex mb-2">
+      <input
+        type="text"
+        value={searchInput}
+        onChange={(e) => setSearchInput(e.target.value)}
+        placeholder="Enter Pokémon name or ID..."
+        className="flex-grow p-2 rounded-l-lg bg-gray-800 text-white border-2 border-gray-700 focus:outline-none focus:border-blue-500 text-sm"
+      />
+      <Button
+        disabled={loading}
+        className={`${side === "left" ? "bg-blue-400 hover:bg-blue-500" : "bg-red-400 hover:bg-red-500"} text-white rounded-l-none rounded-r-lg`}
+      >
+        {loading ? "..." : "Search"}
+      </Button>
+    </form>
+    <Button
+      onClick={() => onRandom(setSearchInput)}
+      disabled={loading}
+      className={`w-full ${side === "left" ? "bg-blue-400 hover:bg-blue-500" : "bg-red-400 hover:bg-red-500"} text-white`}
+    >
+      Random
+    </Button>
+    {error && (
+      <p className="text-yellow-300 mt-2 text-xs">{error}</p>
+    )}
+  </Card>
+));
+
+// Memoized PokemonCard component
+const PokemonCard = memo(({ pokemon, loading, side }) => {
+  // Set gradient background based on which side (blue for left, red for right)
+  const cardGradient = side === "left"
+    ? `radial-gradient(circle, #1e3a8a30, #1e3a8a10)`
+    : `radial-gradient(circle, #b91c1c30, #b91c1c10)`;
+
+  // Loading skeleton UI state
+  if (loading) {
+    return (
+      <Card gradient={cardGradient} className="animate-pulse min-h-[280px]">
+        <div className="h-32 bg-gray-700 rounded-xl mb-3"></div>
+        <div className="h-5 bg-gray-700 rounded w-3/4 mb-2"></div>
+        <div className="h-4 bg-gray-700 rounded w-1/2"></div>
+      </Card>
+    );
+  }
+
+  // Empty state when no Pokémon is selected
+  if (!pokemon) {
+    return (
+      <Card gradient={cardGradient} className="flex flex-col items-center justify-center min-h-[280px] border-2 border-gray-700">
+        <div className="text-white text-center">
+          <p className="text-lg font-bold mb-2">No Pokémon Selected</p>
+          <p className="text-xs opacity-80">Search by name or ID</p>
+        </div>
+      </Card>
+    );
+  }
+
+  // Pokémon card with data display
+  return (
+    <Card gradient={cardGradient}>
+      <div className="relative flex justify-center">
+        {/* Glowing background effect for the Pokémon image */}
+        <div className={`absolute inset-0 ${side === "left" ? "bg-blue-500" : "bg-red-500"} rounded-full filter blur-xl opacity-30 transform scale-75`}></div>
+        <img
+          src={pokemon.image}
+          alt={pokemon.name}
+          className="w-full h-32 sm:h-36 object-contain relative z-10 drop-shadow-xl"
+        />
+      </div>
+
+      <div className="text-center mb-2 mt-2">
+        <h2 className="text-lg sm:text-xl font-bold text-white capitalize">{pokemon.name}</h2>
+        <p className={`text-sm ${side === "left" ? "text-blue-300" : "text-red-300"} font-mono`}>
+          #{pokemon.id.toString().padStart(3, "0")}
+        </p>
+      </div>
+
+      {/* Type badges display */}
+      <div className="flex justify-center gap-1">
+        {pokemon.types.map((type) => (
+          <TypeBadge key={type} type={type} />
+        ))}
+      </div>
+    </Card>
+  );
+});
+
+// Main component
 const ComparePokemons = () => {
   // State for search inputs - tracks what users type in search boxes
   const [leftSearchInput, setLeftSearchInput] = useState("");
@@ -37,22 +140,35 @@ const ComparePokemons = () => {
   } = usePokemonDetail();
 
   // Handle form submission when searching for a Pokémon
-  const handleSearch = useCallback((e, input, fetchFn) => {
+  const handleLeftSearch = useCallback((e, input) => {
     e.preventDefault();
     if (input.trim()) {
-      fetchFn(input.trim().toLowerCase());
+      fetchLeftPokemon(input.trim().toLowerCase());
     }
-  }, []);
+  }, [fetchLeftPokemon]);
+
+  const handleRightSearch = useCallback((e, input) => {
+    e.preventDefault();
+    if (input.trim()) {
+      fetchRightPokemon(input.trim().toLowerCase());
+    }
+  }, [fetchRightPokemon]);
 
   // Generate a random Pokémon ID between 1 and 898
   const getRandomPokemon = useCallback(() => Math.floor(Math.random() * 898) + 1, []);
 
   // Handle random Pokémon button click - updates input field and fetches data
-  const handleRandom = useCallback((setInput, fetchFn) => {
+  const handleLeftRandom = useCallback((setInput) => {
     const randomId = getRandomPokemon();
     setInput(randomId.toString());
-    fetchFn(randomId);
-  }, [getRandomPokemon]);
+    fetchLeftPokemon(randomId);
+  }, [getRandomPokemon, fetchLeftPokemon]);
+
+  const handleRightRandom = useCallback((setInput) => {
+    const randomId = getRandomPokemon();
+    setInput(randomId.toString());
+    fetchRightPokemon(randomId);
+  }, [getRandomPokemon, fetchRightPokemon]);
 
   // Determine stat bar color based on comparison between two Pokémon
   const getStatColor = useCallback((stat1, stat2) => {
@@ -64,100 +180,6 @@ const ComparePokemons = () => {
 
   // Simple navigation function to go back to previous page
   const handleBack = useCallback(() => window.history.back(), []);
-
-  // Reusable SearchBox component with search form and random button
-  const SearchBox = ({ searchInput, setSearchInput, side }) => (
-    <Card
-      gradient={side === "left" ? "from-blue-900 to-blue-700" : "from-red-900 to-red-700"}
-      className="mb-4"
-    >
-      <form onSubmit={(e) => handleSearch(e, searchInput, side === "left" ? fetchLeftPokemon : fetchRightPokemon)} className="flex mb-2">
-        <input
-          type="text"
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-          placeholder="Enter Pokémon name or ID..."
-          className="flex-grow p-2 rounded-l-lg bg-gray-800 text-white border-2 border-gray-700 focus:outline-none focus:border-blue-500 text-sm"
-        />
-        <Button
-          disabled={side === "left" ? leftLoading : rightLoading}
-          className={`${side === "left" ? "bg-blue-400 hover:bg-blue-500" : "bg-red-400 hover:bg-red-500"} text-white rounded-l-none rounded-r-lg`}
-        >
-          {(side === "left" ? leftLoading : rightLoading) ? "..." : "Search"}
-        </Button>
-      </form>
-      <Button
-        onClick={() => handleRandom(setSearchInput, side === "left" ? fetchLeftPokemon : fetchRightPokemon)}
-        disabled={side === "left" ? leftLoading : rightLoading}
-        className={`w-full ${side === "left" ? "bg-blue-400 hover:bg-blue-500" : "bg-red-400 hover:bg-red-500"} text-white`}
-      >
-        Random
-      </Button>
-      {(side === "left" ? leftError : rightError) && (
-        <p className="text-yellow-300 mt-2 text-xs">{side === "left" ? leftError : rightError}</p>
-      )}
-    </Card>
-  );
-
-  // PokemonCard component - displays Pokémon image, name, ID and types
-  const PokemonCard = ({ pokemon, loading, side }) => {
-    // Set gradient background based on which side (blue for left, red for right)
-    const cardGradient = side === "left"
-      ? `radial-gradient(circle, #1e3a8a30, #1e3a8a10)`
-      : `radial-gradient(circle, #b91c1c30, #b91c1c10)`;
-
-    // Loading skeleton UI state
-    if (loading) {
-      return (
-        <Card gradient={cardGradient} className="animate-pulse min-h-[280px]">
-          <div className="h-32 bg-gray-700 rounded-xl mb-3"></div>
-          <div className="h-5 bg-gray-700 rounded w-3/4 mb-2"></div>
-          <div className="h-4 bg-gray-700 rounded w-1/2"></div>
-        </Card>
-      );
-    }
-
-    // Empty state when no Pokémon is selected
-    if (!pokemon) {
-      return (
-        <Card gradient={cardGradient} className="flex flex-col items-center justify-center min-h-[280px] border-2 border-gray-700">
-          <div className="text-white text-center">
-            <p className="text-lg font-bold mb-2">No Pokémon Selected</p>
-            <p className="text-xs opacity-80">Search by name or ID</p>
-          </div>
-        </Card>
-      );
-    }
-
-    // Pokémon card with data display
-    return (
-      <Card gradient={cardGradient}>
-        <div className="relative flex justify-center">
-          {/* Glowing background effect for the Pokémon image */}
-          <div className={`absolute inset-0 ${side === "left" ? "bg-blue-500" : "bg-red-500"} rounded-full filter blur-xl opacity-30 transform scale-75`}></div>
-          <img
-            src={pokemon.image}
-            alt={pokemon.name}
-            className="w-full h-32 sm:h-36 object-contain relative z-10 drop-shadow-xl"
-          />
-        </div>
-
-        <div className="text-center mb-2 mt-2">
-          <h2 className="text-lg sm:text-xl font-bold text-white capitalize">{pokemon.name}</h2>
-          <p className={`text-sm ${side === "left" ? "text-blue-300" : "text-red-300"} font-mono`}>
-            #{pokemon.id.toString().padStart(3, "0")}
-          </p>
-        </div>
-
-        {/* Type badges display */}
-        <div className="flex justify-center gap-1">
-          {pokemon.types.map((type) => (
-            <TypeBadge key={type} type={type} />
-          ))}
-        </div>
-      </Card>
-    );
-  };
 
   // Function to render the stats comparison section
   const renderStats = () => {
@@ -246,6 +268,10 @@ const ComparePokemons = () => {
               searchInput={leftSearchInput}
               setSearchInput={setLeftSearchInput}
               side="left"
+              loading={leftLoading}
+              error={leftError}
+              onSearch={handleLeftSearch}
+              onRandom={handleLeftRandom}
             />
             <PokemonCard
               pokemon={leftPokemon}
@@ -269,6 +295,10 @@ const ComparePokemons = () => {
               searchInput={rightSearchInput}
               setSearchInput={setRightSearchInput}
               side="right"
+              loading={rightLoading}
+              error={rightError}
+              onSearch={handleRightSearch}
+              onRandom={handleRightRandom}
             />
             <PokemonCard
               pokemon={rightPokemon}
