@@ -31,7 +31,7 @@ const PaginationControls = ({
   };
 
   return (
-    <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-between items-center mt-8 bg-[#1A1A1A] p-4 rounded-lg shadow-sm">
+    <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-between items-center mt-8 bg-[#1A1A1A] p-4 max-md:px-2 rounded-lg shadow-sm">
       
       {/* Items per page */}
       <div className="flex items-center text-white font-bold">
