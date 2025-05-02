@@ -2,7 +2,7 @@ const AbilitiesTab = ({ pokemon }) => (
   <div>
     <h2 className="text-2xl font-bold mb-10 text-center">Abilities</h2>
 
-    <div className="max-w-3xl mx-auto grid gap-6">
+    <div className="max-w-full mx-auto grid gap-6">
       {pokemon.abilities.map((ability) => (
         <div
           key={ability.name}

@@ -173,7 +173,7 @@ const PokemonDetailsPage = () => {
 
         <PokemonTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
-        <div className="bg-[#1E1E1E] rounded-2xl shadow-2xl p-8 mb-8">
+        <div className="bg-[#1E1E1E] rounded-2xl shadow-2xl p-8 max-md:p-2 mb-8">
           {activeTab === "stats" && (
             <StatsTab pokemon={pokemon}  />
           )}
