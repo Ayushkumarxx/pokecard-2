@@ -19,14 +19,14 @@ const Navbar = ({ onSearch }) => {
         </h1>
       </div>
 
-      <div className="flex gap-4 items-center">
+      <div className="flex gap-4 max-md:gap-2 items-center">
         <Exports.components.searchBar onSearch={onSearch} />
 
         <button
-          className="py-3 px-4 bg-[#333333] rounded-full cursor-pointer flex gap-2 items-center "
+          className="py-3 px-4 max-md:px-3 bg-[#333333] rounded-full cursor-pointer flex gap-2 items-center "
           onClick={() => navigate("/favorites")}
         >
-          <FaHeart className="text-gray-300 text-[20px] md:text-[22px] " />{" "}
+          <FaHeart className="text-gray-300 text-[20px] md:text-[20px] " />{" "}
           <p className="text-gray-300 text-[14px] font-bold">Favorites</p>
         </button>
       </div>
