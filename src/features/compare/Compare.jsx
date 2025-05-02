@@ -235,7 +235,7 @@ const ComparePokemons = () => {
         <BackButton onClick={handleBack} />
 
         {/* Header */}
-        <h1 className="text-xl sm:text-2xl font-bold text-white mb-2">Your Favorite Pokémon</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-white mb-2">Compare Pokémon</h1>
         <div className="h-1 w-24 mb-6 rounded-full bg-white"></div>
 
         {/* Main layout with 7-column grid on larger screens */}
