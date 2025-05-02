@@ -67,7 +67,7 @@ const FavoritesPage = () => {
           <FaArrowLeft className="mr-2" /> Back
         </button>
 
-        <h1 className="text-3xl font-bold text-white mb-2">
+        <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
           Your Favorite Pokémon
         </h1>
         <div className="h-1 w-32 mb-8 rounded-full bg-text-gray"></div>
@@ -78,7 +78,7 @@ const FavoritesPage = () => {
             <h2 className="text-xl font-semibold text-white mb-2">
               No Favorites Yet
             </h2>
-            <p className="text-gray-400">
+            <p className="text-gray-400 text-center font-semibold text-sm">
               You haven't liked any Pokémon yet. Explore the Pokédex and click
               the heart icon to add Pokémon to your favorites!
             </p>
