@@ -56,7 +56,7 @@ function SearchBar({ onSearch }) {
           value={query}
           onChange={handleInputChange}
           placeholder="Search Pokémon"
-          className="rounded-full pl-12 pr-10 py-3 bg-[#333333] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FFCB05] w-64 transition-all duration-300 font-semibold"
+          className="rounded-full pl-8 pr-8 py-3 md:pl-12 md:pr-10 bg-[#333333] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FFCB05] w-64 transition-all duration-300 font-semibold"
         />
         <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
 
