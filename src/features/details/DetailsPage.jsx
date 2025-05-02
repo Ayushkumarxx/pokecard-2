@@ -9,6 +9,8 @@ import StatsTab from "./components/StatsTab";
 import EvolutionTab from "./components/EvolutionTab";
 import AbilitiesTab from "./components/AbilitiesTab";
 import MovesTab from "./components/MovesTab";
+import SectionLoader from "../../shared/components/SectionLoader";
+
 
 // Reusable MovesTab Component
 
@@ -113,16 +115,7 @@ const PokemonDetailsPage = () => {
 
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-[#121212]">
-        <div className="text-center">
-          <div className="w-16 h-16 border-t-4 border-r-4 border-indigo-500 rounded-full animate-spin mx-auto"></div>
-          <p className="mt-6 text-xl text-gray-300 font-medium">
-            Searching the Pokédex...
-          </p>
-        </div>
-      </div>
-    );
+    return <SectionLoader/>;
   }
 
   if (error) {

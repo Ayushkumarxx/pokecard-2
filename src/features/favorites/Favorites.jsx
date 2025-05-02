@@ -4,8 +4,8 @@ import PokemonCard from "../../shared/components/PokemonCard";
 import usePokemonDetail from "../../shared/hooks/usePokemonDetail";
 import { FaArrowLeft } from "react-icons/fa"; // Back icon from React Icons
 import { useNavigate } from "react-router-dom"; // For navigation
-import Exports from "../../shared/utils/export";
 import { FaHeart } from "react-icons/fa6";
+import SectionLoader from "../../shared/components/SectionLoader";
 
 /**
  * FavoritesPage Component
@@ -50,7 +50,7 @@ const FavoritesPage = () => {
   );
   if (loading) {
     return (
-      <Exports.components.sectionLoader
+      <SectionLoader
         minHeight="min-h-screen"
         message="Loading your favorite Pokémon..."
       />

@@ -15,7 +15,6 @@ import Navbar from "../components/Navbar";
 import SearchBar from "../components/SearchBar";
 import PokemonCard from "../components/PokemonCard";
 import NoResults from "../components/NoResults";
-import SectionLoader from "../components/SectionLoader";
 
 /**
  * Image assets
@@ -37,7 +36,7 @@ let Exports = {
     searchBar: SearchBar,
     pokemonCard: PokemonCard,
     noResults: NoResults,
-    sectionLoader: SectionLoader,
+
   },
 };
 
