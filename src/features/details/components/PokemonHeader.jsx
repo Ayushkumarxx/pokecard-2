@@ -84,7 +84,7 @@ const PokemonHeader = ({ pokemon, getTypeColor }) => (
 
           {/* Flavor Text */}
           <div className="bg-[#00000030] backdrop-blur-sm rounded-xl p-4 mb-6">
-            <p className="text-gray-300 leading-relaxed font-semibold">
+            <p className="text-gray-300 leading-relaxed font-semibold max-md:text-[14px]">
               {pokemon.species.flavorText}
             </p>
           </div>
