@@ -11,6 +11,7 @@ const App = () => {
           <Route path="/" element={<routes.home />} />
           <Route path="/favorites" element={<routes.favorites />} />
           <Route path="/details/:id" element={<routes.details />} />
+          <Route path="/compare" element={<routes.compare />} />
         </Routes>
       </Router>
     </LikeProvider>
